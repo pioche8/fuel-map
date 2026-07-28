@@ -1,0 +1,470 @@
+<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Marine Decarbonisation Technology Map",
+  "schemaVersion": 1,
+  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4, app r1): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
+  "mcpTools": [],
+  "mcpServerNames": []
+}
+</script>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marine decarbonisation — technology landscape (v2)</title>
+<style>
+:root{--navy:#002039;--blue:#004070;--olive:#5F775E;--grey:#9AA6AE;--amber:#C8A24B;--red:#D2091E;
+--ink:#002039;--mut:#6B7780;--line:#DCE2E7;--tint:#EEF3F7;--paper:#ffffff;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Montserrat','Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:#F4F7FA}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 26px 30px}
+.kick{font-size:12px;letter-spacing:.16em;font-weight:700;color:var(--red);text-transform:uppercase}
+h1{font-size:26px;margin:4px 0 2px;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--mut);font-size:14px;margin:0 0 16px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:14px}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.glabel{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--mut);text-transform:uppercase;margin-right:2px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:600;
+color:var(--navy);cursor:pointer;transition:.15s;user-select:none}
+.chip:hover{border-color:var(--blue)}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.chip.tog.on{background:var(--red);border-color:var(--red)}
+.main{display:grid;grid-template-columns:1fr 348px;gap:18px;align-items:start}
+.plotcard{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px}
+svg{width:100%;height:auto;display:block}
+.bub{cursor:pointer;transition:opacity .18s}
+.bub circle.body{transition:stroke-width .12s}
+.lbl{font-size:12px;font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.leader{stroke:#C4CCD2;stroke-width:1}
+.qtag{font-size:12px;font-weight:700;fill:#B2BCC3;letter-spacing:.02em}
+.axttl{font-size:12px;font-weight:700;fill:var(--navy)}
+.axend{font-size:12px;font-weight:700;fill:var(--navy)}
+.ytick{font-size:10px;font-weight:600;fill:#9AA6AE}
+.dim{opacity:.12;pointer-events:none}
+.hideL{display:none}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;position:sticky;top:14px;min-height:470px}
+.pcat{font-size:11px;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+.pname{font-size:20px;font-weight:700;margin:3px 0 10px;letter-spacing:-.01em}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;background:var(--tint);color:var(--navy);margin:0 6px 8px 0}
+.pill.hi{background:#E8EEE7;color:#46583F}.pill.me{background:#F7EFD9;color:#8F6E23}.pill.lo{background:#FBE9EB;color:#D2091E}
+.row{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12.5px}
+.rk{flex:0 0 100px;color:var(--mut);font-weight:600}
+.rv{flex:1;color:var(--ink)}
+.verdict{margin-top:12px;padding:11px 12px;background:var(--tint);border-radius:8px;font-size:13px;line-height:1.5;font-weight:600}
+.hint{color:var(--mut);font-size:13px;line-height:1.6}
+.foot{color:var(--mut);font-size:11px;margin-top:14px;line-height:1.5}
+@media(max-width:880px){.main{grid-template-columns:1fr}.panel{position:static;min-height:0}}
+</style></head><body><div class="wrap">
+<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r2 — live map + calculator</div>
+<h1>Marine decarbonisation: the technology landscape</h1>
+<p class="sub">Topić dry-bulk fleet · 18 fuels and levers on commercial readiness vs depth of well-to-wake cut, with sourced uncertainty bands. Hover a bubble for the evidence; switch on the moves overlay to see what re-verification changed.</p>
+<div class="toolbar">
+ <div class="grp"><span class="glabel">View</span><span class="chip on" id="viewMap">Map</span><span class="chip" id="viewCalc">Calculator</span></div>
+ <div class="grp" id="mapchips1"><span class="glabel">Category</span><span id="catchips"></span></div>
+ <div class="grp mapchips2"><span class="glabel">Horizon</span><span id="horchips"></span></div>
+ <div class="grp">
+  <span class="chip tog" id="dropTog">Drop-in on today’s fleet</span>
+  <span class="chip tog on" id="bandTog">Uncertainty bands</span>
+  <span class="chip tog" id="moveTog">23 Jul → v3 moves</span>
+ </div>
+</div>
+<div class="main">
+ <div class="plotcard"><svg id="plot" viewBox="0 0 1000 588" role="img" aria-label="Technology landscape scatter, v2"></svg></div>
+ <div class="panel" id="panel"></div>
+</div>
+
+<div id="calcwrap" style="display:none">
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
+  <div class="panel" style="position:static;min-height:0">
+   <div class="pcat" style="color:#5F775E">1 · Fuel intensity &amp; abatement</div>
+   <div class="pname" style="font-size:16px">Pathway / blend → WtW cut</div>
+   <div class="row"><div class="rk">Alt fuel</div><div class="rv"><select id="p1fuel" style="width:100%"></select></div></div>
+   <div class="row"><div class="rk">Alt WtW g/MJ</div><div class="rv"><input id="p1wtw" type="number" step="0.01" value="16.5" style="width:90px"> <span class="hint" style="font-size:11px">(editable)</span></div></div>
+   <div class="row"><div class="rk">Blend mass %</div><div class="rv"><input id="p1share" type="number" min="0" max="100" value="30" style="width:70px"> % in <select id="p1base"><option>VLSFO</option><option>HFO</option><option>MGO</option></select></div></div>
+   <div class="row"><div class="rk">Energy share</div><div class="rv" id="o1share">—</div></div>
+   <div class="row"><div class="rk">Blend WtW</div><div class="rv" id="o1wtw">—</div></div>
+   <div class="row"><div class="rk">Cut vs 91.16</div><div class="rv" id="o1cut" style="font-weight:700">—</div></div>
+   <div class="row"><div class="rk">Avoided /t blend</div><div class="rv" id="o1av">—</div></div>
+   <div class="row"><div class="rk">Premium USD/t</div><div class="rv"><input id="p1prem" type="number" value="269" style="width:90px"></div></div>
+   <div class="verdict" id="o1abate">—</div>
+  </div>
+  <div class="panel" style="position:static;min-height:0">
+   <div class="pcat" style="color:#004070">2 · FuelEU Maritime balance</div>
+   <div class="pname" style="font-size:16px">Compliance balance &amp; penalty</div>
+   <div class="row"><div class="rk">Year</div><div class="rv"><select id="p2year"><option>2025</option><option selected>2030</option><option>2035</option><option>2040</option><option>2045</option><option>2050</option></select></div></div>
+   <div class="row"><div class="rk">Attained g/MJ</div><div class="rv"><input id="p2att" type="number" step="0.01" value="70.42" style="width:90px"> <span class="chip" id="useBlend" style="padding:2px 8px;font-size:10.5px">← use blend</span></div></div>
+   <div class="row"><div class="rk">EU energy MJ</div><div class="rv"><input id="p2mj" type="number" value="15000000" style="width:130px"></div></div>
+   <div class="row"><div class="rk">EUA €/t</div><div class="rv"><input id="p2eua" type="number" value="80" style="width:70px"></div></div>
+   <div class="row"><div class="rk">Target</div><div class="rv" id="o2t">—</div></div>
+   <div class="row"><div class="rk">Balance</div><div class="rv" id="o2b" style="font-weight:700">—</div></div>
+   <div class="row"><div class="rk">Penalty (Annex IV)</div><div class="rv" id="o2p">—</div></div>
+   <div class="row"><div class="rk">EU ETS cost</div><div class="rv" id="o2e">—</div></div>
+   <div class="verdict" id="o2v">—</div>
+  </div>
+  <div class="panel" style="position:static;min-height:0">
+   <div class="pcat" style="color:#C8A24B">3 · IMO NZF exposure <span style="color:#D2091E">(draft — vote 4 Dec 2026)</span></div>
+   <div class="pname" style="font-size:16px">GFI vs targets → USD</div>
+   <div class="row"><div class="rk">Year</div><div class="rv"><select id="p3year"></select></div></div>
+   <div class="row"><div class="rk">Fleet GFI g/MJ</div><div class="rv"><input id="p3gfi" type="number" step="0.01" value="95.40" style="width:90px"></div></div>
+   <div class="row"><div class="rk">Ships</div><div class="rv"><input id="p3ships" type="number" value="10" style="width:60px"> × <input id="p3e" type="number" value="186221300" style="width:120px"> MJ/yr</div></div>
+   <div class="row"><div class="rk">Base / Direct</div><div class="rv" id="o3t">—</div></div>
+   <div class="row"><div class="rk">Tier 1</div><div class="rv" id="o31">—</div></div>
+   <div class="row"><div class="rk">Tier 2</div><div class="rv" id="o32">—</div></div>
+   <div class="row"><div class="rk">Total / yr</div><div class="rv" id="o3tot" style="font-weight:700">—</div></div>
+   <div class="row"><div class="rk">USD per ship-day</div><div class="rv" id="o3day">—</div></div>
+   <div class="verdict">Deck fleet model: z-factors on 93.3, band 12.129 g, USD 100/380. Scenario until adopted.</div>
+  </div>
+ </div>
+ <div class="foot" style="margin-top:10px">Live coefficients from <b><span class="dataver">data v4</span></b> · engine formula-identical to engine.py (parity 37/37) and the workbook's 44 formulas (self-test 44/44) · FuelEU penalty per Annex IV, Reg (EU) 2023/1805; €640/tCO₂e shown for comparability (DNV conversion) · NZF figures are the deck's validated fleet model of the DRAFT framework · defaults: EU energy 15M MJ (≈8% of one ship-year) · <b>prices as of <span id="pricedate">10 Jul 2026</span></b> — EUA €<span id="priceeua">80</span>/tCO₂e, B30 blend premium $<span id="priceprem">269</span>/t Rotterdam (refreshed each monthly sweep; a price refresh NEVER bumps the dataset version — both fields stay user-editable above regardless of the last sweep).</div>
+</div>
+<div class="foot"><b>v3 · triangulated 24 Jul 2026</b> — every pathway anchored on one regulatory, one class/consultancy and one peer-reviewed source (full table: fuel-map-v3-verified.md). Y-axis to scale: WtW GHG cut vs the FuelEU 91.16 gCO₂e/MJ 2020 reference (Reg (EU) 2023/1805 Annex II defaults, GWP AR4; whiskers = sourced bands). X-axis: MMMCZCS 7-dimension value-chain readiness mapped to a 0–100 rubric — directional. Bubble size = fit to today’s fleet (drop-in &gt; retrofit &gt; dual-fuel conversion &gt; newbuild-only). Battery-electric excluded: short-sea only (Kersey 2022); on 2024 EU grid ≈65% cut. Blue NH₃ can be net-negative at low capture (−37%). Bio-oils plotted at band mid. Full sourcing &amp; math: <i>fuel-map-v3-verified.md</i> · <i>Fuel_Technology_Map_v3.xlsx</i> (v2 files retained as audit trail). Figures dated Jun–Jul 2026 where priced; re-verify before committing capital.</div>
+</div>
+<script>
+const DATA=[
+{name:"B30 biodiesel",short:"B30",x:88,y:23,r:26,cat:"bio",fit:"Drop-in",horizon:"Now",dropin:true,conf:"High",
+ wtw:"≈70.4 gCO₂e/MJ energy-weighted blend → 22.7% cut (B24 ≈ 18%)",band:[18,23],
+ cost:"EUR 140–290 /tCO₂e avoided (Jul 26 at top); R’dam blend premium $269/t (10 Jul 26)",
+ cert:"ISCC-EU PoS per parcel",constraint:"Parcel availability at bulk hubs; OEM blend limits.",
+ mile:"SG bio 1.36 Mt in 2025 (+56%); −46% H1-26 — price-elastic demand, supply intact",
+ src:"Reg 2023/1805 Annex I-II · RED II · ESSF May-25",old:null,added:false,
+ verdict:"Near-term lead: drop-in, no capex, clears the lines to ~2032.",lx:80,ly:31},
+{name:"B100 biodiesel (UCOME)",short:"B100",x:80,y:82,r:26,cat:"bio",fit:"Drop-in",horizon:"Now",dropin:true,conf:"High",
+ wtw:"≈16.5 g default (certs to 11.3) → 80–88% cut",band:[80,88],
+ cost:"$1,340/t R’dam print (10 Jul 26); UCOME $1,603 FOB ARA",
+ cert:"ISCC-EU PoS · ISO 8217:2024 DF grades to 100% FAME",
+ constraint:"&gt;B30 needs MPA approval (SG); storage/handling; UCO integrity risk.",
+ mile:"SG sold 25.5 kt B100 in 2025; MAN SL2023-741 + WinGD accept B100 without modification",
+ src:"RED II Annex V · ISO 8217:2024 · MPA Jan-26",old:null,added:true,
+ verdict:"NEW — the ladder’s top rung: deep AND drop-in, buyable today at a price. Extends OUR FOCUS.",lx:89,ly:87},
+{name:"HVO renewable diesel",short:"HVO",x:76,y:77,r:26,cat:"bio",fit:"Drop-in",horizon:"Now",dropin:true,conf:"High",
+ wtw:"21.57 g conservative certificate → 76%; official defaults 16.0–17.25 → 81–82%",band:[76,82],
+ cost:"Premium fuel (≈$1,710/t Argus Apr-26, indicative); full-mix ≈$3.2–3.8m per ship-yr",
+ cert:"ISCC-EU PoS",constraint:"Feedstock pull from SAF/road mandates (IEA); thin marine volumes.",
+ mile:"IEA 2025: waste-oil feedstocks already under high demand across renewable diesel + biojet",
+ src:"RED II Annex V · FuelEU Annex II · IEA 2025",old:null,added:false,
+ verdict:"Premium drop-in: deep and available; the premium is the question.",lx:68,ly:70},
+{name:"Bio-methanol",short:"Bio-MeOH",x:56,y:72,r:16,cat:"bio",fit:"Dual-fuel",horizon:"Mid",dropin:false,conf:"Medium",
+ wtw:"10–31 g parcels → 66–89%; RED II waste-wood default 84% saving → 83.5% cut",band:[66,89],
+ cost:"≈$2,500/t MGOe ≈ 3× MGO (DNV Dec-25)",cert:"ISCC-EU PoS",
+ constraint:"Global low-GHG methanol output only ~2.2 Mt; needs a methanol dual-fuel ship.",
+ mile:"3 Singapore methanol licences live 1 Jan 26; R’dam bio-MeOH 11.8 kt in 2025 (3×)",
+ src:"MMMCZCS sheet · Methanol Institute · DNV Dec-25",old:[52,68],added:false,
+ verdict:"Only with dual-fuel tonnage; conversion proven (Maersk Halifax, 2024).",lx:50,ly:64},
+{name:"Bio-LNG (LBM)",short:"Bio-LNG",x:64,y:78,r:16,cat:"bio",fit:"Dual-fuel",horizon:"Near",dropin:false,conf:"Medium",
+ wtw:"≈20.6 g HP-engine waste feedstock → 78%; Otto-cycle slip erodes to ~63%",band:[55,85],
+ cost:"LBM–LNG spread ≈$490/t (May-26, indicative)",cert:"ISCC-EU · RED II Annex VI mass-balance",
+ constraint:"Needs LNG dual-fuel tonnage; feedstock spread wide (manure credits beyond 100%).",
+ mile:"R’dam bio-LNG 6× in 2025 → 17,644 m³; &gt;15k m³ in Q1-26 alone; Shell LBM at 22 locations",
+ src:"RED II VI · SEA-LNG · S&B Feb-26",old:[58,78],added:false,
+ verdict:"Deep on a mature engine — if you had LNG tonnage; engine slip class decides the cut.",lx:57,ly:86},
+{name:"Bio-oils / pyrolysis",short:"Bio-oils",x:25,y:64,r:14,cat:"bio",fit:"Drop-in intent",horizon:"Mid",dropin:false,conf:"Low",
+ wtw:"32.3 g, IMO method, SMR-H₂ (Prussi) → 65%; GREET FP-family 79–99% savings vs LSFO (Masum) → to ~94% — method/allocation + feedstock + H₂ assumptions drive the spread",band:[60,94],
+ cost:"Pre-commercial",cert:"No marine fuel spec yet",
+ constraint:"Commercial viability; upgrading hydrogen source dominates the footprint.",
+ mile:"MASH Makes: first vessel trial of pyrolysis-derived drop-in biofuel, Apr-25",
+ src:"Energies 17:5464 · MMMCZCS Nov-24",old:null,added:true,
+ verdict:"NEW (watchlist) — MMMCZCS-mapped, first trial run; not yet buyable.",lx:16,ly:59},
+{name:"E-methanol",short:"E-MeOH",x:44,y:87,r:16,cat:"efuel",fit:"Dual-fuel",horizon:"Mid",dropin:false,conf:"Medium",
+ wtw:"0.5–21 g → 77–99% cut (RFNBO floor 69%)",band:[77,99],
+ cost:"~5× LSFO today; ≈$130/t abated WITH the NZF reward (reward undefined)",
+ cert:"RFNBO — ×2 FuelEU multiplier to 2033 · ZNZ-class if ≤19",
+ constraint:"Supply tiny (Kassø 42 kt/yr); dual-fuel ship required.",
+ mile:"Kassø operating since May-25 (Maersk offtake); Platts M3 R’dam assessment launched Jun-26",
+ src:"MMMCZCS sheet · RED II Art 25/29a",old:[40,80],added:false,
+ verdict:"ZNZ-eligible; cheapest deep lever on paper WITH the Fund reward.",lx:44,ly:96},
+{name:"E-LNG (e-methane)",short:"E-LNG",x:24,y:85,r:16,cat:"efuel",fit:"Dual-fuel",horizon:"Later",dropin:false,conf:"Medium-Low",
+ wtw:"&lt;7–10 g on HP engine → 89–92%; Otto ~73%",band:[73,92],
+ cost:"4.5–5× LSFO (MMMCZCS)",cert:"RFNBO pathway",
+ constraint:"Renewable electricity scale; methane slip.",
+ mile:"No commercial marine e-methane supply operating (Jul-26)",
+ src:"MMMCZCS e-methane sheet",old:[26,82],added:false,
+ verdict:"Engines mature; the fuel does not commercially exist yet.",lx:28,ly:93},
+{name:"E-diesel (FT / PtL)",short:"E-diesel",x:18,y:88,r:24,cat:"efuel",fit:"Drop-in (no supply yet)",horizon:"Later",dropin:true,conf:"Medium",
+ wtw:"3.8–8.6 g renewable-powered → 91–96% (RFNBO floor 69%)",band:[69,96],
+ cost:"~6× LSFO; abatement ≈$650/t (MMMCZCS)",cert:"RFNBO pathway",
+ constraint:"Production maturity (DAC = major challenges); no marine sale found.",
+ mile:"MMMCZCS: vessel side fully drop-in; production the binding constraint",
+ src:"MMMCZCS e-diesel sheet · GREET 2021",old:null,added:true,
+ verdict:"NEW — the only deep AND drop-in e-fuel: tomorrow’s B100, unbuyable today.",lx:11,ly:80},
+{name:"Green ammonia",short:"NH3",x:30,y:78,r:12,cat:"efuel",fit:"Newbuild",horizon:"Later",dropin:false,conf:"Medium",
+ wtw:"15–32 g incl ~5% pilot + N₂O → 65–84% cut; best-case 11.4 g → 87%",band:[65,88],
+ cost:"Reward-dependent; safety capex extra",cert:"ZNZ-class if ≤19 · IMO LCA pathway pending",
+ constraint:"No green NH₃ bunkering anywhere; toxicity safety case; retrofit ≈150% of vessel value → newbuild-only.",
+ mile:"EXMAR Antwerpen in service 10 Jun 26; first NH₃ bulkers due end-26. IMO's own review (MEPC 83/7/23): no 2-stroke N₂O measurements exist yet — certified data due 2026-27 under MEPC.414(84)",
+ src:"MEPC 83/7/23 · MMMCZCS · Kanchiralla 2026 · Wong ERL 2024",old:[24,85],added:false,
+ verdict:"Engines are real now; the fuel is still grey and N₂O unproven in service. Study now, order later.",lx:35,ly:71},
+{name:"Blue ammonia",short:"Blue NH3",x:28,y:55,r:12,cat:"efuel",fit:"Newbuild",horizon:"Later",dropin:false,conf:"Low",
+ wtw:"18–125 g → +80% to −37%; peer-reviewed benefit 17–30% in the best-case nitrogen scenario (EDF 2025: 62.4 g prod CI, GWP₁₀₀ 273)",band:[0,80],
+ cost:"≈2.5× LSFO fuel (MMMCZCS); same engine capex as green",
+ cert:"No regulatory default exists · fossil+CCS",constraint:"Capture rate 60–95%, upstream CH₄ and indirect N₂O decide everything.",
+ mile:"Walkowiak & Esquivel-Elizondo, ES&T 2025: 17–30% best-case; ≥5% N→N₂O conversion negates (scenario-conditional)",
+ src:"MMMCZCS sheet · Walkowiak/EDF ES&T 2025 · Bauer 2022",old:[26,60],added:false,
+ verdict:"v3: moved down — the consultancy done-well case (60) sits above what peer review supports; widest band on the map.",lx:35,ly:49},
+{name:"Green hydrogen",short:"H2",x:10,y:84,r:12,cat:"efuel",fit:"Newbuild",horizon:"Later",dropin:false,conf:"Medium",
+ wtw:"Delivered CI: project median 24.2 g → 73%; 95%-CI low 6.7 g → 93% (RFNBO floor 69%)",band:[69,93],
+ cost:"Resource-constrained; liquefaction burns 35–45% of the H₂'s own energy (11.9–15 kWh/kg)",cert:"RFNBO pathway · H₂ leakage GWP (~11.6) uncounted by any marine rule",
+ constraint:"Onboard storage volume; deep-sea unproven (1 order H1-26).",
+ mile:"de Kleijne (Nat Energy 2024, 1,025 projects): production median 2.9 kgCO₂e/kg, most-optimistic config (Author Correction Sep-24: Fig 5b only)",
+ src:"de Kleijne 2024 · Al Ghafri 2022 · Sand 2023 · DNV AFI",old:[10,88],added:false,
+ verdict:"v3: moved down — delivered-to-ship CI sits well above the ideal-case number the chart used to show.",lx:4,ly:76},
+{name:"Nuclear / SMR",short:"Nuclear",x:9,y:97,r:12,cat:"nonfuel",fit:"Newbuild",horizon:"2040+",dropin:false,conf:"Medium",
+ wtw:"Lifecycle ≈1.4–3.3 g/MJ(e) → 96–98% cut",band:[96,98],
+ cost:"Unpriced; regulatory",cert:"No marine framework yet",
+ constraint:"Regulation, port acceptance, capex.",
+ mile:"LR/ABS concept-design approvals 11 Jun 26; LR nuclear roadmap Oct-25",
+ src:"UNECE 2021 · LR/ABS/WNN Jun-26",old:null,added:false,
+ verdict:"Concepts and AiPs only; a 2040s newbuild question, not a decision now.",lx:17,ly:99},
+{name:"Energy efficiency",short:"Efficiency",x:95,y:15,r:20,cat:"nonfuel",fit:"Retrofit",horizon:"Now",dropin:true,conf:"High",
+ wtw:"4–16% by 2030 (DNV Maritime Forecast 2050, 2024 ed.; Capesize case ~20%)",band:[4,16],
+ cost:"Neutral-to-negative — pays for itself",cert:"n/a",
+ constraint:"Diminishing returns; drydock scheduling.",
+ mile:"DNV MF2050 2025 ed. reconfirmed Jul-26",
+ src:"DNV Maritime Forecast 2050 (2024 ed.)",old:null,added:false,
+ verdict:"Do first: cheapest lever, cuts all three bills at once.",lx:96,ly:26},
+{name:"Wind assistance",short:"Wind",x:80,y:9,r:20,cat:"nonfuel",fit:"Retrofit",horizon:"Now",dropin:true,conf:"High",
+ wtw:"5–10% typical, route-dependent (to ~20% best routes)",band:[5,20],
+ cost:"Capex, route-dependent payback",cert:"FuelEU Annex I reward factor f_wind 0.99/0.97/0.95 (≤5% of intensity)",
+ constraint:"Deck space; route wind resource.",
+ mile:"LR-verified: 9.1% average net propulsion saving (peak 21%), Anemoi rotor sails, Kamsarmax TR Lady (May-25); IWSA Jun-26: 100+ ships, 24 bulkers",
+ src:"IWSA / MarineLink 1 Jun 26",old:null,added:false,
+ verdict:"A helper, not a strategy — and now a proven bulker retrofit.",lx:72,ly:15},
+{name:"Onboard CO₂ capture",short:"OCCS",x:40,y:35,r:16,cat:"nonfuel",fit:"Retrofit",horizon:"Mid",dropin:true,conf:"Medium",
+ wtw:"Net 29–56% (HFO designs, to 76 LNG-HP); 8–18% measured in the first offload pilot",band:[8,56],
+ cost:"EUR 98–149 /t (study); EverLoNG full-chain €195/€280 (two ships); COLOSSUS $269–405",
+ cert:"EU ETS: mineralisation deduction accepted 22 Jul 26 · FuelEU: none (Art 30(2)(i) review end-27) · IMO: framework targeted 2028",
+ constraint:"CO₂ offload at &lt;10 ports; energy penalty; deadweight.",
+ mile:"EU ETS acceptance 22 Jul 26; installs incl. Berge Bulk; Wärtsilä unit on Solvang",
+ src:"GCMD Jun-25/Jul-26 · Visonà 2024",old:null,added:false,
+ verdict:"Track, don’t commit: the regulatory door just opened; measured performance still shy of design.",lx:40,ly:26},
+{name:"Deck solar (PV)",short:"Solar",x:84,y:2,r:9,cat:"nonfuel",fit:"Retrofit",horizon:"Now",dropin:true,conf:"High",
+ wtw:"~1–2% of total energy (auxiliary load only)",band:null,
+ cost:"Low capex, low yield",cert:"n/a",
+ constraint:"Hatch-cover operations; area.",
+ mile:"First direct-propulsion PV is an inland vessel (Blue Marlin, Jul-25)",
+ src:"pv magazine 14 Jul 25",old:null,added:false,
+ verdict:"Monitor only: trims hotel load, not propulsion.",lx:76,ly:1},
+{name:"LNG (fossil)",short:"Fossil LNG",x:88,y:10,r:16,cat:"fossil",fit:"Dual-fuel",horizon:"Now",dropin:false,conf:"High",
+ wtw:"76.1–89.2 g by engine class → 2–17% cut (Otto-MS 2.2%; Diesel-SS 16.5%)",band:[2,17],
+ cost:"Fuel $853/t R’dam (Jul 26); conversion of existing bulkers not a real market",
+ cert:"n/a (fossil) · slip enters EU ETS 2026",
+ constraint:"Measured slip 6.4% avg (FUMES) vs 3.1% default — real-world worse; not a destination.",
+ mile:"914 in operation / 654 on order; 61 delivered in H1-26 (DNV AFI)",
+ src:"FuelEU Annex II (computed) · ICCT FUMES · DNV AFI",old:[66,19],added:false,
+ verdict:"Fully commercial — and the Annex II math caps the cut at 17%, Otto-cycle nearer 2%.",lx:94,ly:3}
+];
+const CAT={bio:'#5F775E',efuel:'#004070',nonfuel:'#9AA6AE',fossil:'#C8A24B'};
+const EDGE={bio:'#465945',efuel:'#002039',nonfuel:'#6B7780',fossil:'#8F6E23'};
+const M={l:64,r:26,t:26,b:60}, W=1000,H=588, pw=W-M.l-M.r, ph=H-M.t-M.b;
+const X=x=>M.l+x/100*pw, Y=y=>M.t+(1-y/100)*ph;
+const svg=document.getElementById('plot');
+const NS='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+// defs: arrowhead
+const defs=el('defs',{});
+const mk=el('marker',{id:'arr',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'});
+mk.appendChild(el('path',{d:'M0,0 L10,5 L0,10 z',fill:'#D2091E','fill-opacity':'0.6'}));
+defs.appendChild(mk); svg.appendChild(defs);
+// y gridlines + ticks (to-scale axis)
+[0,25,50,75,100].forEach(v=>{
+ if(v>0&&v<100&&v!==50)svg.appendChild(el('line',{x1:X(0),y1:Y(v),x2:X(100),y2:Y(v),stroke:'#EEF2F5','stroke-width':1}));
+ const t=el('text',{x:M.l-8,y:Y(v)+3.5,'text-anchor':'end'});t.setAttribute('class','ytick');t.textContent=v+'%';svg.appendChild(t);
+});
+// quadrant lines
+svg.appendChild(el('line',{x1:X(55),y1:Y(102),x2:X(55),y2:Y(-7),stroke:'#DCE2E7','stroke-width':1}));
+svg.appendChild(el('line',{x1:X(0),y1:Y(50),x2:X(100),y2:Y(50),stroke:'#DCE2E7','stroke-width':1}));
+// axis frame
+svg.appendChild(el('line',{x1:M.l,y1:M.t,x2:M.l,y2:H-M.b,stroke:'#B9C4CC','stroke-width':1}));
+svg.appendChild(el('line',{x1:M.l,y1:H-M.b,x2:W-M.r,y2:H-M.b,stroke:'#B9C4CC','stroke-width':1}));
+function txt(x,y,s,cls,extra){const e=el('text',Object.assign({x:x,y:y},extra||{}));e.setAttribute('class',cls);e.textContent=s;svg.appendChild(e);return e;}
+// quadrant tags
+txt(X(1)+4,Y(101),'THE DESTINATION','qtag',{});
+txt(X(99),Y(101),'NEAR-TERM PRIZE','qtag',{'text-anchor':'end',fill:'#5E86A6'});
+txt(X(50),Y(-5.5),'CHEAP HELPERS · shallow but available','qtag',{'text-anchor':'middle'});
+// axis labels
+txt(M.l-8,H-M.b+22,'LONG-TERM HORIZON','axend',{});
+txt(W-M.r,H-M.b+22,'AVAILABLE NOW','axend',{'text-anchor':'end'});
+txt(W/2,H-10,'COMMERCIAL READINESS  →','axttl',{'text-anchor':'middle'});
+const yl=txt(16,Y(50),'WELL-TO-WAKE GHG CUT vs 91.16 gCO₂e/MJ  →','axttl',{'text-anchor':'middle'});yl.setAttribute('transform',`rotate(-90 16 ${Y(50)})`);
+// focus rings — the drop-in ladder
+DATA.filter(d=>['B30','HVO','B100'].includes(d.short)).forEach(d=>{
+ svg.appendChild(el('circle',{cx:X(d.x),cy:Y(d.y),r:d.r+8,fill:'none',stroke:'#D2091E','stroke-width':1.8,'stroke-dasharray':'5 4'}));});
+txt(X(89),Y(60),'OUR FOCUS','lbl',{'text-anchor':'middle',fill:'#D2091E','font-size':'14'});
+txt(X(89),Y(54.5),'the drop-in ladder: B30 → B100 / HVO','lbl',{'text-anchor':'middle',fill:'#D2091E','font-size':'11'});
+// uncertainty whiskers (behind bubbles)
+const bandG=el('g',{id:'bands'}); svg.appendChild(bandG);
+const bandEls={};
+DATA.forEach(d=>{
+ if(!d.band)return;
+ const g=el('g',{});
+ let bx=X(d.x);
+ if(d.short==='Fossil LNG')bx-=6; if(d.short==='B30')bx+=6; // same-x declutter
+ g.appendChild(el('line',{x1:bx,y1:Y(d.band[0]),x2:bx,y2:Y(d.band[1]),stroke:CAT[d.cat],'stroke-width':2.5,'stroke-opacity':0.28}));
+ [0,1].forEach(i=>g.appendChild(el('line',{x1:bx-4,y1:Y(d.band[i]),x2:bx+4,y2:Y(d.band[i]),stroke:CAT[d.cat],'stroke-width':2,'stroke-opacity':0.35})));
+ bandG.appendChild(g); bandEls[d.short]=g;
+});
+{const t=el('text',{x:X(28)+7,y:Y(2.2),'font-size':'9.5','font-style':'italic',fill:'#9AA6AE'});t.textContent='Blue NH₃ band extends to −37%';bandG.appendChild(t);}
+// moves overlay (23 Jul -> v2), hidden by default
+const moveG=el('g',{id:'moves',style:'display:none'}); svg.appendChild(moveG);
+DATA.forEach(d=>{
+ if(d.old){
+  const gr=Math.max(8,d.r*0.7);
+  moveG.appendChild(el('circle',{cx:X(d.old[0]),cy:Y(d.old[1]),r:gr,fill:'none',stroke:'#D2091E','stroke-width':1.3,'stroke-dasharray':'3 3','stroke-opacity':0.45}));
+  const x1=X(d.old[0]),y1=Y(d.old[1]),x2=X(d.x),y2=Y(d.y);
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,k=Math.max(0,(L-d.r-5)/L);
+  moveG.appendChild(el('line',{x1:x1,y1:y1,x2:x1+dx*k,y2:y1+dy*k,stroke:'#D2091E','stroke-width':1.6,'stroke-opacity':0.55,'stroke-dasharray':'6 4','marker-end':'url(#arr)'}));
+ }
+ if(d.added){
+  moveG.appendChild(el('circle',{cx:X(d.x),cy:Y(d.y),r:d.r+5,fill:'none',stroke:'#D2091E','stroke-width':1.3,'stroke-dasharray':'2 3','stroke-opacity':0.6}));
+  const t=el('text',{x:X(d.x),y:Y(d.y)-d.r-8,'text-anchor':'middle',fill:'#D2091E','font-size':'10','font-weight':'700'});t.textContent='NEW';moveG.appendChild(t);
+ }
+});
+// bubbles + labels
+const groups={};
+DATA.forEach(d=>{
+ const g=el('g',{class:'bub'}); g.dataset.short=d.short;
+ g.appendChild(el('line',{class:'leader',x1:X(d.x),y1:Y(d.y),x2:X(d.lx),y2:Y(d.ly)}));
+ const c=el('circle',{class:'body',cx:X(d.x),cy:Y(d.y),r:d.r,fill:CAT[d.cat],
+   'fill-opacity':0.9,stroke:EDGE[d.cat],'stroke-width':1.7});
+ g.appendChild(c);
+ g.appendChild(el('circle',{cx:X(d.x),cy:Y(d.y),r:3,fill:'#fff'}));
+ const t=el('text',{x:X(d.lx),y:Y(d.ly)+4,'text-anchor':'middle'});t.setAttribute('class','lbl');
+ t.setAttribute('fill', (d.cat==='bio'||d.cat==='efuel')?'#002039':'#78848C');
+ t.textContent=d.short; g.appendChild(t);
+ g.addEventListener('mouseenter',()=>{if(!pinned)show(d); c.setAttribute('stroke-width',3.4);});
+ g.addEventListener('mouseleave',()=>{c.setAttribute('stroke-width',1.7);});
+ g.addEventListener('click',e=>{e.stopPropagation();pinned=(pinned===d.short)?null:d.short;show(d);});
+ svg.appendChild(g); groups[d.short]=g;
+});
+document.getElementById('plot').addEventListener('click',()=>{pinned=null;});
+// panel
+const panel=document.getElementById('panel'); let pinned=null;
+const CONFCLS={High:'hi',Medium:'me','Medium-Low':'me',Low:'lo'};
+const CATNAME={bio:'Bio green fuel',efuel:'E-fuel / zero-carbon',nonfuel:'Non-fuel lever',fossil:'Fossil transition'};
+function show(d){
+ panel.innerHTML=`<div class="pcat" style="color:${CAT[d.cat]}">${CATNAME[d.cat]}</div>
+ <div class="pname">${d.name}</div>
+ <span class="pill">${d.horizon}</span><span class="pill">${d.fit}</span><span class="pill ${CONFCLS[d.conf]||'me'}">Confidence: ${d.conf}</span>${d.dropin?'<span class="pill" style="background:#FBE9EB;color:#D2091E">Fits today’s fleet</span>':''}
+ <div class="row"><div class="rk">WtW cut</div><div class="rv">${d.wtw}</div></div>
+ <div class="row"><div class="rk">Cost signal</div><div class="rv">${d.cost}</div></div>
+ <div class="row"><div class="rk">Certification</div><div class="rv">${d.cert}</div></div>
+ <div class="row"><div class="rk">Key constraint</div><div class="rv">${d.constraint}</div></div>
+ <div class="row"><div class="rk">Latest (’25-26)</div><div class="rv">${d.mile}</div></div>
+ <div class="row"><div class="rk">Sources</div><div class="rv">${d.src}</div></div>
+ <div class="verdict">${d.verdict}</div>`;
+}
+function hint(){panel.innerHTML=`<div class="hint"><b>Hover</b> any bubble for its evidence card — WtW cut with sourced band, cost, certification, constraint, latest 2025-26 milestone and confidence. <b>Click</b> to pin.<br><br>The three ringed bubbles — <b>B30</b>, <b>HVO</b> and now <b>B100</b> — are one continuous drop-in ladder on a single certificate chain. That ladder is the strategy.<br><br>Toggle <b>23 Jul → v3 moves</b> to see what verification changed: LNG right-and-down (Annex II math), green NH₃ right-and-down (engines real, N₂O honest), e-MeOH up (Kassø real), and the v3 academic pass: H₂ down (delivered CI) and blue NH₃ down (EDF cap).</div>`;}
+hint();
+// filters
+let fcat='all', fhor='all', fdrop=false;
+function apply(){
+ DATA.forEach(d=>{
+  const ok=(fcat==='all'||d.cat===fcat)&&(fhor==='all'||d.horizon===fhor)&&(!fdrop||d.dropin);
+  groups[d.short].classList.toggle('dim',!ok);
+  if(bandEls[d.short])bandEls[d.short].classList.toggle('dim',!ok);
+ });
+}
+const cats=[['all','All'],['bio','Bio green fuel'],['efuel','E-fuel / zero-carbon'],['nonfuel','Non-fuel lever'],['fossil','Fossil transition']];
+const cc=document.getElementById('catchips');
+cats.forEach(([v,l],i)=>{const s=document.createElement('span');s.className='chip'+(i===0?' on':'');
+ s.innerHTML=(CAT[v]?`<span class="dot" style="background:${CAT[v]}"></span>`:'')+l;
+ s.onclick=()=>{fcat=v;[...cc.children].forEach(x=>x.classList.remove('on'));s.classList.add('on');apply();};cc.appendChild(s);});
+const hors=[['all','All'],['Now','Available now'],['Near','Near (2028-30)'],['Mid','Mid (2030-35)'],['Later','Later (2035+)'],['2040+','2040+']];
+const hc=document.getElementById('horchips');
+hors.forEach(([v,l],i)=>{const s=document.createElement('span');s.className='chip'+(i===0?' on':'');s.textContent=l;
+ s.onclick=()=>{fhor=v;[...hc.children].forEach(x=>x.classList.remove('on'));s.classList.add('on');apply();};hc.appendChild(s);});
+const dt=document.getElementById('dropTog');
+dt.onclick=()=>{fdrop=!fdrop;dt.classList.toggle('on',fdrop);apply();};
+const bt=document.getElementById('bandTog');
+bt.onclick=()=>{const on=bt.classList.toggle('on');document.getElementById('bands').style.display=on?'':'none';};
+const mt=document.getElementById('moveTog');
+mt.onclick=()=>{const on=mt.classList.toggle('on');document.getElementById('moves').style.display=on?'':'none';};
+
+/*DATASET_START*/
+const DATASET = {"version":"v4","date":"2026-07-27","focus":["B30","HVO","B100"],"battery":"excluded","data":[{"short":"B30","name":"B30 biodiesel","x":88,"y":23,"r":26,"cat":"bio","lx":80,"ly":31,"band":[18,23]},{"short":"B100","name":"B100 biodiesel","x":80,"y":82,"r":26,"cat":"bio","lx":89,"ly":87,"band":[80,88]},{"short":"HVO","name":"HVO renewable diesel","x":76,"y":77,"r":26,"cat":"bio","lx":68,"ly":70,"band":[76,82]},{"short":"Bio-MeOH","name":"Bio-methanol","x":56,"y":72,"r":16,"cat":"bio","lx":50,"ly":64,"band":[66,89]},{"short":"Bio-LNG","name":"Bio-LNG","x":64,"y":78,"r":16,"cat":"bio","lx":57,"ly":86,"band":[55,85]},{"short":"Bio-oils","name":"Bio-oils / pyrolysis","x":25,"y":64,"r":14,"cat":"bio","lx":16,"ly":59,"band":[60,94]},{"short":"E-MeOH","name":"E-methanol","x":44,"y":87,"r":16,"cat":"efuel","lx":44,"ly":96,"band":[77,99]},{"short":"E-LNG","name":"E-LNG","x":24,"y":85,"r":16,"cat":"efuel","lx":28,"ly":93,"band":[73,92]},{"short":"E-diesel","name":"E-diesel (FT/PtL)","x":18,"y":88,"r":24,"cat":"efuel","lx":11,"ly":80,"band":[69,96]},{"short":"NH3","name":"Green ammonia","x":30,"y":78,"r":12,"cat":"efuel","lx":35,"ly":71,"band":[65,88]},{"short":"Blue NH3","name":"Blue ammonia","x":28,"y":55,"r":12,"cat":"efuel","lx":35,"ly":49,"band":[0,80]},{"short":"H2","name":"Green hydrogen","x":10,"y":84,"r":12,"cat":"efuel","lx":4,"ly":76,"band":[69,93]},{"short":"Nuclear","name":"Nuclear / SMR","x":9,"y":97,"r":12,"cat":"nonfuel","lx":17,"ly":99,"band":[96,98]},{"short":"Efficiency","name":"Energy efficiency","x":95,"y":15,"r":20,"cat":"nonfuel","lx":96,"ly":26,"band":[4,16]},{"short":"Wind","name":"Wind assistance","x":80,"y":9,"r":20,"cat":"nonfuel","lx":72,"ly":15,"band":[5,20]},{"short":"OCCS","name":"Onboard CO2 capture","x":40,"y":35,"r":16,"cat":"nonfuel","lx":40,"ly":26,"band":[8,56]},{"short":"Solar","name":"Deck solar (PV)","x":84,"y":2,"r":9,"cat":"nonfuel","lx":76,"ly":1,"band":null},{"short":"Fossil LNG","name":"LNG (fossil)","x":88,"y":10,"r":16,"cat":"fossil","lx":94,"ly":3,"band":[2,17]}]};
+/*DATASET_END*/
+/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r1 */
+const CONST={REF:91.16,
+ FOSSIL:{VLSFO:91.39,HFO:91.74,MGO:90.77},
+ LNG:{otto_ms:89.20,lbsi:86.94,otto_ss:82.87,diesel_ss:76.08},
+ LCV:{VLSFO:41.0,HFO:40.5,MGO:42.7,FAME:37.2},
+ FUELS:{"UCOME (default E + TtW)":16.5,"UCOME (RED II default E)":15.04,"UCOME (typical cert 88%)":11.28,
+ "HVO (conservative cert)":21.57,"HVO (FuelEU-derived)":17.25,"HVO (RED II E)":16.0,
+ "Bio-LNG (HP, waste)":20.6,"Bio-MeOH (RED II waste-wood)":15.04,"E-MeOH (low)":0.5,"E-MeOH (high)":21.0,
+ "RFNBO cap":28.2,"Green NH3 (MMMCZCS low)":15.0,"Green NH3 (MMMCZCS high)":32.0,
+ "Green H2 (delivered median, de Kleijne)":24.2,"Green H2 (best)":6.7,"Blue NH3 (best)":18.0,
+ "Blue NH3 (EDF cap)":63.8,"E-diesel (wind/solar)":3.8,"Pyrolysis (upgraded, IMO)":32.3,"Nuclear (per MJe)":1.6},
+ FUELEU_STEPS:[[2025,2.0],[2030,6.0],[2035,14.5],[2040,31.0],[2045,62.0],[2050,80.0]],
+ FUELEU_PENALTY:2400.0,VLSFO_EQ_MJ_PER_T:41000.0,EUR_PER_TCO2E_REF:640.0,EUA_EUR_DEFAULT:80.0,
+ NZF_BASE0:93.3,NZF_Z:{2028:4.0,2029:6.0,2030:8.0,2031:12.4,2032:16.8,2033:21.2,2034:25.6,2035:30.0,2036:37.0,2037:44.0,2038:51.0,2039:58.0,2040:65.0},
+ NZF_BAND:12.129,T1_USD:100.0,T2_USD:380.0,E_SHIPYEAR_MJ:3977*40200+617*42700,EURUSD:1.14,GRID_2024:213.0};
+function cut(w){return (CONST.REF-w)/CONST.REF*100.0;}
+function energyShare(ms,la,lb){la=la||CONST.LCV.FAME;lb=lb||CONST.LCV.VLSFO;return ms*la/(ms*la+(1-ms)*lb);}
+function blendWtw(ms,alt,base,lcvAlt){alt=(alt===undefined)?16.5:alt;base=base||"VLSFO";
+ const e=energyShare(ms,lcvAlt,CONST.LCV[base]);const w=(1-e)*CONST.FOSSIL[base]+e*alt;
+ return {energy_share_pct:e*100,wtw:w,cut_pct:cut(w)};}
+function batteryEq(grid,ee,el){grid=(grid===undefined||grid===null)?CONST.GRID_2024:grid;ee=ee||0.475;el=el||0.875;
+ const g=grid/3.6;const f=g*(ee/el);return {fuel_eq_g_per_mj:f,cut_pct:cut(f)};}
+function fueleuTarget(y){let s=0.0;for(const [yy,st] of CONST.FUELEU_STEPS){if(y>=yy)s=st;}return CONST.REF*(1-s/100.0);}
+function fueleu(y,att,mj,eua){const t=fueleuTarget(y);const cb=(t-att)*mj;let pen=0.0;
+ if(cb<0)pen=Math.abs(cb)/(att*CONST.VLSFO_EQ_MJ_PER_T)*CONST.FUELEU_PENALTY;
+ const ets=att*mj/1e6*((eua===undefined||eua===null)?CONST.EUA_EUR_DEFAULT:eua);
+ return {target:t,balance_tco2e:cb/1e6,penalty_eur:pen,penalty_ref_eur_per_tco2e:CONST.EUR_PER_TCO2E_REF,ets_cost_eur:ets};}
+function nzfTargets(y){const z=CONST.NZF_Z[y];if(z===undefined)return null;
+ const b=CONST.NZF_BASE0*(1-z/100.0);return {base:b,direct:b-CONST.NZF_BAND};}
+function nzf(y,gfi,ships,eMj){ships=ships||1;const t=nzfTargets(y);if(!t)return null;
+ const E=((eMj===undefined||eMj===null)?CONST.E_SHIPYEAR_MJ:eMj)*ships;
+ const ob=Math.max(0.0,gfi-t.base);
+ const t1g=(gfi>t.direct)?Math.min(Math.max(0.0,gfi-t.direct),CONST.NZF_BAND):0.0;
+ const t1=t1g*E*CONST.T1_USD/1e6, t2=ob*E*CONST.T2_USD/1e6;
+ return {base:t.base,direct:t.direct,tier1_usd:t1,tier2_usd:t2,total_usd:t1+t2,usd_per_ship_day:(t1+t2)/ships/365.0};}
+function abateCost(prem,ms,alt,base){ms=(ms===undefined)?0.30:ms;alt=(alt===undefined)?16.5:alt;base=base||"VLSFO";
+ const b=blendWtw(ms,alt,base);const lcv=ms*CONST.LCV.FAME+(1-ms)*CONST.LCV[base];
+ const av=(CONST.FOSSIL[base]-b.wtw)*lcv*1000/1e6;
+ return {avoided_tco2e_per_t:av,usd_per_tco2e:av>0?prem/av:null,eur_per_tco2e:av>0?prem/av/CONST.EURUSD:null};}
+
+
+// runtime self-check: map card DATA must match canonical DATASET
+(function(){const jm={};DATASET.data.forEach(d=>jm[d.short]=[d.x,d.y]);
+ DATA.forEach(d=>{const j=jm[d.short];if(!j||j[0]!==d.x||j[1]!==d.y)console.warn("DATASET mismatch:",d.short);});})();
+// view toggle
+const vm=document.getElementById('viewMap'),vc=document.getElementById('viewCalc');
+const mainEl=document.querySelector('.main'),calcEl=document.getElementById('calcwrap');
+const mapChipEls=[document.getElementById('mapchips1'),document.querySelector('.grp.mapchips2'),document.getElementById('dropTog').parentElement];
+function setView(calc){calcEl.style.display=calc?'':'none';mainEl.style.display=calc?'none':'';
+ mapChipEls.forEach(e=>{if(e)e.style.display=calc?'none':'';});
+ vc.classList.toggle('on',calc);vm.classList.toggle('on',!calc);}
+vm.onclick=()=>setView(false);vc.onclick=()=>setView(true);
+// calculator wiring
+const $=id=>document.getElementById(id);
+const fsel=$('p1fuel');Object.keys(CONST.FUELS).forEach(k=>{const o=document.createElement('option');o.textContent=k;fsel.appendChild(o);});
+const co=document.createElement('option');co.textContent='Custom';fsel.appendChild(co);
+fsel.value='UCOME (default E + TtW)';
+fsel.onchange=()=>{if(fsel.value!=='Custom')$('p1wtw').value=CONST.FUELS[fsel.value];recalc();};
+const ysel=$('p3year');Object.keys(CONST.NZF_Z).forEach(y=>{const o=document.createElement('option');o.textContent=y;ysel.appendChild(o);});ysel.value='2030';
+const f0=(n,d)=>Number(n).toLocaleString('en-US',{maximumFractionDigits:d===undefined?0:d,minimumFractionDigits:d===undefined?0:d});
+let lastBlend=null;
+function recalc(){
+ const alt=parseFloat($('p1wtw').value)||0, ms=Math.min(100,Math.max(0,parseFloat($('p1share').value)||0))/100, base=$('p1base').value;
+ const b=blendWtw(ms,alt,base); lastBlend=b;
+ $('o1share').textContent=f0(b.energy_share_pct,1)+' %';
+ $('o1wtw').textContent=f0(b.wtw,2)+' gCO₂e/MJ';
+ $('o1cut').textContent=f0(b.cut_pct,1)+' %';
+ const ab=abateCost(parseFloat($('p1prem').value)||0,ms,alt,base);
+ $('o1av').textContent=ab.avoided_tco2e_per_t>0?f0(ab.avoided_tco2e_per_t,2)+' tCO₂e':'—';
+ $('o1abate').textContent=ab.usd_per_tco2e?('Abatement cost: $'+f0(ab.usd_per_tco2e)+' / €'+f0(ab.eur_per_tco2e)+' per tCO₂e — vs FuelEU penalty ref €640, NZF Tier 2 ≈ €334'):'No abatement vs base fuel at these inputs.';
+ const fr=fueleu(parseInt($('p2year').value),parseFloat($('p2att').value)||0,parseFloat($('p2mj').value)||0,parseFloat($('p2eua').value)||0);
+ $('o2t').textContent=f0(fr.target,2)+' gCO₂e/MJ';
+ const surp=fr.balance_tco2e>=0;
+ $('o2b').textContent=(surp?'+':'')+f0(fr.balance_tco2e,1)+' tCO₂e '+(surp?'(surplus — bankable/poolable)':'(deficit)');
+ $('o2b').style.color=surp?'#46583F':'#D2091E';
+ $('o2p').textContent=fr.penalty_eur>0?'€'+f0(fr.penalty_eur):'€0';
+ $('o2e').textContent='€'+f0(fr.ets_cost_eur);
+ $('o2v').textContent=surp?'Compliant at this intensity: surplus can be banked (2 yr) or pooled — June-26 pool price ≈ €171/tCO₂e.':'Deficit: abate below the target line or pool/borrow; never pay €2,400/t — it compounds 10%/yr on repeat.';
+ const nr=nzf(parseInt($('p3year').value),parseFloat($('p3gfi').value)||0,parseInt($('p3ships').value)||1,parseFloat($('p3e').value)||CONST.E_SHIPYEAR_MJ);
+ if(nr){$('o3t').textContent=f0(nr.base,2)+' / '+f0(nr.direct,2)+' gCO₂e/MJ';
+  $('o31').textContent='$'+f0(nr.tier1_usd);$('o32').textContent='$'+f0(nr.tier2_usd);
+  $('o3tot').textContent='$'+f0(nr.total_usd);$('o3day').textContent='$'+f0(nr.usd_per_ship_day);}
+}
+$('useBlend').onclick=()=>{if(lastBlend){$('p2att').value=lastBlend.wtw.toFixed(2);recalc();}};
+['p1wtw','p1share','p1base','p1prem','p2year','p2att','p2mj','p2eua','p3year','p3gfi','p3ships','p3e'].forEach(id=>{$(id).addEventListener('input',recalc);$(id).addEventListener('change',recalc);});
+recalc();
+</script></body></html>
