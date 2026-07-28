@@ -2,14 +2,14 @@
 {
   "name": "Marine Decarbonisation Technology Map",
   "schemaVersion": 1,
-  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4, app r1): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
+  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4 · app r3): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
   "mcpTools": [],
   "mcpServerNames": []
 }
 </script>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marine decarbonisation — technology system (data v4 · app r2)</title>
+<title>Marine decarbonisation — technology system (data v4 · app r3)</title>
 <style>
 :root{--navy:#002039;--blue:#004070;--olive:#5F775E;--grey:#9AA6AE;--amber:#C8A24B;--red:#D2091E;
 --ink:#002039;--mut:#6B7780;--line:#DCE2E7;--tint:#EEF3F7;--paper:#ffffff;}
@@ -54,7 +54,7 @@ svg{width:100%;height:auto;display:block}
 .foot{color:var(--mut);font-size:11px;margin-top:14px;line-height:1.5}
 @media(max-width:880px){.main{grid-template-columns:1fr}.panel{position:static;min-height:0}}
 </style></head><body><div class="wrap">
-<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r2 — live map + calculator</div>
+<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r3 — live map + calculator</div>
 <h1>Marine decarbonisation: the technology landscape</h1>
 <p class="sub">Topić dry-bulk fleet · 18 fuels and levers on commercial readiness vs depth of well-to-wake cut, with sourced uncertainty bands. Hover a bubble for the evidence; switch on the moves overlay to see what re-verification changed.</p>
 <div class="toolbar">
@@ -73,7 +73,7 @@ svg{width:100%;height:auto;display:block}
 </div>
 
 <div id="calcwrap" style="display:none">
- <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
+ <div class="hint" style="margin:2px 0 10px;font-size:11.5px;line-height:1.5"><b>Structural values</b> (pathway coordinates, regulatory coefficients) come from <b>data v4</b> and change only with a cited dataset release. <b>Market defaults</b> — EUA &euro;/t and blend premium $/t — are <b>editable snapshots</b>, refreshed at the monthly sweep and dated by the &ldquo;prices as of&rdquo; stamp below; a price refresh never changes the dataset version. Every input stays editable; edits are yours until reload.</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
   <div class="panel" style="position:static;min-height:0">
    <div class="pcat" style="color:#5F775E">1 · Fuel intensity &amp; abatement</div>
    <div class="pname" style="font-size:16px">Pathway / blend → WtW cut</div>
@@ -84,7 +84,7 @@ svg{width:100%;height:auto;display:block}
    <div class="row"><div class="rk">Blend WtW</div><div class="rv" id="o1wtw">—</div></div>
    <div class="row"><div class="rk">Cut vs 91.16</div><div class="rv" id="o1cut" style="font-weight:700">—</div></div>
    <div class="row"><div class="rk">Avoided /t blend</div><div class="rv" id="o1av">—</div></div>
-   <div class="row"><div class="rk">Premium USD/t</div><div class="rv"><input id="p1prem" type="number" value="269" style="width:90px"></div></div>
+   <div class="row"><div class="rk">Premium USD/t</div><div class="rv"><input id="p1prem" type="number" value="269" style="width:90px"> <span class="hint" style="font-size:11px">market default &mdash; editable</span></div></div>
    <div class="verdict" id="o1abate">—</div>
   </div>
   <div class="panel" style="position:static;min-height:0">
@@ -93,7 +93,7 @@ svg{width:100%;height:auto;display:block}
    <div class="row"><div class="rk">Year</div><div class="rv"><select id="p2year"><option>2025</option><option selected>2030</option><option>2035</option><option>2040</option><option>2045</option><option>2050</option></select></div></div>
    <div class="row"><div class="rk">Attained g/MJ</div><div class="rv"><input id="p2att" type="number" step="0.01" value="70.42" style="width:90px"> <span class="chip" id="useBlend" style="padding:2px 8px;font-size:10.5px">← use blend</span></div></div>
    <div class="row"><div class="rk">EU energy MJ</div><div class="rv"><input id="p2mj" type="number" value="15000000" style="width:130px"></div></div>
-   <div class="row"><div class="rk">EUA €/t</div><div class="rv"><input id="p2eua" type="number" value="80" style="width:70px"></div></div>
+   <div class="row"><div class="rk">EUA €/t</div><div class="rv"><input id="p2eua" type="number" value="80" style="width:70px"> <span class="hint" style="font-size:11px">market default &mdash; editable</span></div></div>
    <div class="row"><div class="rk">Target</div><div class="rv" id="o2t">—</div></div>
    <div class="row"><div class="rk">Balance</div><div class="rv" id="o2b" style="font-weight:700">—</div></div>
    <div class="row"><div class="rk">Penalty (Annex IV)</div><div class="rv" id="o2p">—</div></div>
@@ -381,7 +381,7 @@ mt.onclick=()=>{const on=mt.classList.toggle('on');document.getElementById('move
 /*DATASET_START*/
 const DATASET = {"version":"v4","date":"2026-07-27","focus":["B30","HVO","B100"],"battery":"excluded","data":[{"short":"B30","name":"B30 biodiesel","x":88,"y":23,"r":26,"cat":"bio","lx":80,"ly":31,"band":[18,23]},{"short":"B100","name":"B100 biodiesel","x":80,"y":82,"r":26,"cat":"bio","lx":89,"ly":87,"band":[80,88]},{"short":"HVO","name":"HVO renewable diesel","x":76,"y":77,"r":26,"cat":"bio","lx":68,"ly":70,"band":[76,82]},{"short":"Bio-MeOH","name":"Bio-methanol","x":56,"y":72,"r":16,"cat":"bio","lx":50,"ly":64,"band":[66,89]},{"short":"Bio-LNG","name":"Bio-LNG","x":64,"y":78,"r":16,"cat":"bio","lx":57,"ly":86,"band":[55,85]},{"short":"Bio-oils","name":"Bio-oils / pyrolysis","x":25,"y":64,"r":14,"cat":"bio","lx":16,"ly":59,"band":[60,94]},{"short":"E-MeOH","name":"E-methanol","x":44,"y":87,"r":16,"cat":"efuel","lx":44,"ly":96,"band":[77,99]},{"short":"E-LNG","name":"E-LNG","x":24,"y":85,"r":16,"cat":"efuel","lx":28,"ly":93,"band":[73,92]},{"short":"E-diesel","name":"E-diesel (FT/PtL)","x":18,"y":88,"r":24,"cat":"efuel","lx":11,"ly":80,"band":[69,96]},{"short":"NH3","name":"Green ammonia","x":30,"y":78,"r":12,"cat":"efuel","lx":35,"ly":71,"band":[65,88]},{"short":"Blue NH3","name":"Blue ammonia","x":28,"y":55,"r":12,"cat":"efuel","lx":35,"ly":49,"band":[0,80]},{"short":"H2","name":"Green hydrogen","x":10,"y":84,"r":12,"cat":"efuel","lx":4,"ly":76,"band":[69,93]},{"short":"Nuclear","name":"Nuclear / SMR","x":9,"y":97,"r":12,"cat":"nonfuel","lx":17,"ly":99,"band":[96,98]},{"short":"Efficiency","name":"Energy efficiency","x":95,"y":15,"r":20,"cat":"nonfuel","lx":96,"ly":26,"band":[4,16]},{"short":"Wind","name":"Wind assistance","x":80,"y":9,"r":20,"cat":"nonfuel","lx":72,"ly":15,"band":[5,20]},{"short":"OCCS","name":"Onboard CO2 capture","x":40,"y":35,"r":16,"cat":"nonfuel","lx":40,"ly":26,"band":[8,56]},{"short":"Solar","name":"Deck solar (PV)","x":84,"y":2,"r":9,"cat":"nonfuel","lx":76,"ly":1,"band":null},{"short":"Fossil LNG","name":"LNG (fossil)","x":88,"y":10,"r":16,"cat":"fossil","lx":94,"ly":3,"band":[2,17]}]};
 /*DATASET_END*/
-/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r1 */
+/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r3 */
 const CONST={REF:91.16,
  FOSSIL:{VLSFO:91.39,HFO:91.74,MGO:90.77},
  LNG:{otto_ms:89.20,lbsi:86.94,otto_ss:82.87,diesel_ss:76.08},
