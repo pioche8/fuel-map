@@ -38,7 +38,8 @@
    "heartbeat": "ok",
    "parity": {
     "engine": "44/44",
-    "js": "37/37"
+    "js": "37/37",
+    "dataset_mismatch": false
    },
    "calc_smoke": "19/19",
    "console_errors": 0,
@@ -52,73 +53,6 @@
    "note": "app r5->r6 deployed 2235a51; NZF label de-dated; engine header synced; docs pack produced",
    "elapsed_min": 10,
    "stale_flags": []
-  },
-  {
-   "run": "2026-07-29-r6-label-deploy",
-   "date": "2026-07-29",
-   "kind": "event",
-   "fired": true,
-   "completed": true,
-   "start": "14:55",
-   "end": "15:05",
-   "checks_planned": 3,
-   "checks_completed": 3,
-   "escalations": 0,
-   "deploy_attempted": true,
-   "deploy_succeeded": true,
-   "deploy_sha": "2235a51",
-   "hosted_method": "git-hash",
-   "hosted_reachable": true,
-   "heartbeat": "ok",
-   "parity": "37/37",
-   "calc_smoke": "19/19",
-   "console_errors": 0,
-   "data_version": "v5",
-   "app_version": "r6",
-   "prices_stamp": "2026-07-10",
-   "no_action": false,
-   "last_check": {
-    "nzf-label-wording": "2026-07-29"
-   },
-   "note": "app r5->r6 deployed 2235a51; NZF label de-dated; engine header synced; docs pack produced",
-   "elapsed_min": 10,
-   "stale_flags": []
-  },
-  {
-   "run": "2026-07-29-r6-label-deploy",
-   "date": "2026-07-29",
-   "kind": "event",
-   "fired": true,
-   "completed": true,
-   "start": "14:55",
-   "end": "15:05",
-   "checks_planned": 3,
-   "checks_completed": 3,
-   "escalations": 0,
-   "high_changes": 0,
-   "deploy_attempted": true,
-   "deploy_succeeded": true,
-   "deploy_sha": "2235a51",
-   "hosted_method": "git-hash",
-   "hosted_reachable": true,
-   "heartbeat": "ok",
-   "parity": "37/37",
-   "calc_smoke": "19/19",
-   "console_errors": 0,
-   "page_load": "ok",
-   "data_version": "v5",
-   "app_version": "r6",
-   "prices_stamp": "2026-07-10",
-   "stale_flags": [],
-   "no_action": false,
-   "detect_to_deploy_h": 4,
-   "pub_to_detect_days": 0,
-   "last_check": {
-    "nzf-label-wording": "2026-07-29",
-    "engine-header-sync": "2026-07-29"
-   },
-   "note": "app r5->r6 deployed 2235a51; NZF panel now draft-not-yet-adopted matching methodology; engine docstring v5/r6; owner-facing docs pack produced",
-   "elapsed_min": 10
   },
   {
    "run": "2026-07-29-data-v5-solar",
@@ -575,7 +509,8 @@
   "heartbeat": "ok",
   "parity": {
    "engine": "44/44",
-   "js": "37/37"
+   "js": "37/37",
+   "dataset_mismatch": false
   },
   "calc_smoke": "19/19",
   "console_errors": 0,
