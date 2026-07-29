@@ -2,14 +2,14 @@
 {
   "name": "Marine Decarbonisation Technology Map",
   "schemaVersion": 1,
-  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4 · app r4): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
+  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4 · app r5): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
   "mcpTools": [],
   "mcpServerNames": []
 }
 </script>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marine decarbonisation — technology system (data v4 · app r4)</title>
+<title>Marine decarbonisation — technology system (data v4 · app r5)</title>
 <style>
 :root{--navy:#002039;--blue:#004070;--olive:#5F775E;--grey:#9AA6AE;--amber:#C8A24B;--red:#D2091E;
 --ink:#002039;--mut:#6B7780;--line:#DCE2E7;--tint:#EEF3F7;--paper:#ffffff;}
@@ -54,11 +54,11 @@ svg{width:100%;height:auto;display:block}
 .foot{color:var(--mut);font-size:11px;margin-top:14px;line-height:1.5}
 @media(max-width:880px){.main{grid-template-columns:1fr}.panel{position:static;min-height:0}}
 </style></head><body><div class="wrap">
-<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r4 — live map + calculator</div>
+<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r5 — live map + calculator</div>
 <h1>Marine decarbonisation: the technology landscape</h1>
 <p class="sub">Topić dry-bulk fleet · 18 fuels and levers on commercial readiness vs depth of well-to-wake cut, with sourced uncertainty bands. Hover a bubble for the evidence.</p>
 <div class="toolbar">
- <div class="grp"><span class="glabel">View</span><span class="chip on" id="viewMap">Map</span><span class="chip" id="viewCalc">Calculator</span></div>
+ <div class="grp"><span class="glabel">View</span><span class="chip on" id="viewMap">Map</span><span class="chip" id="viewCalc">Calculator</span><span class="chip" id="viewTime">Timeline</span></div>
  <div class="grp" id="mapchips1"><span class="glabel">Category</span><span id="catchips"></span></div>
  <div class="grp mapchips2"><span class="glabel">Horizon</span><span id="horchips"></span></div>
  <div class="grp">
@@ -71,7 +71,12 @@ svg{width:100%;height:auto;display:block}
  <div class="panel" id="panel"></div>
 </div>
 
-<div id="calcwrap" style="display:none">
+<div id="timewrap" style="display:none">
+  <div class="hint" style="margin:2px 0 8px;font-size:11.5px;line-height:1.5"><b>Timeline</b> — how the map has moved across dataset versions. <b>v4 is the baseline</b>; as sweeps move coordinates on new evidence, later versions appear here and you can step ◀ ▶ (or <b>Play</b>) to see the shift, with the reason for each move. Positions only — uncertainty bands are in the Map view.</div>
+  <div style="display:flex;align-items:center;gap:10px;margin:4px 0 10px;flex-wrap:wrap"><span class="chip" id="tPrev">◀ Prev</span><span id="tLabel" style="font-weight:700;min-width:210px;text-align:center;font-size:13px"></span><span class="chip" id="tNext">Next ▶</span><span class="chip" id="tPlay">▶ Play</span></div>
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:16px"><div class="plotcard"><svg id="tplot" viewBox="0 0 1000 588" role="img" aria-label="Timeline scatter, coordinate shifts across versions"></svg></div><div class="panel" id="tpanel" style="font-size:12.5px;line-height:1.55"></div></div>
+ </div>
+ <div id="calcwrap" style="display:none">
  <div class="hint" style="margin:2px 0 10px;font-size:11.5px;line-height:1.5"><b>Structural values</b> (pathway coordinates, regulatory coefficients) come from <b>data v4</b> and change only with a cited dataset release. <b>Market defaults</b> — EUA &euro;/t and blend premium $/t — are <b>editable snapshots</b>, refreshed at the monthly sweep and dated by the &ldquo;prices as of&rdquo; stamp below; a price refresh never changes the dataset version. Every input stays editable; edits are yours until reload.</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
   <div class="panel" style="position:static;min-height:0">
    <div class="pcat" style="color:#5F775E">1 · Fuel intensity &amp; abatement</div>
@@ -361,7 +366,10 @@ bt.onclick=()=>{const on=bt.classList.toggle('on');document.getElementById('band
 /*DATASET_START*/
 const DATASET = {"version":"v4","date":"2026-07-27","focus":["B30","HVO","B100"],"battery":"excluded","data":[{"short":"B30","name":"B30 biodiesel","x":88,"y":23,"r":26,"cat":"bio","lx":80,"ly":31,"band":[18,23]},{"short":"B100","name":"B100 biodiesel","x":80,"y":82,"r":26,"cat":"bio","lx":89,"ly":87,"band":[80,88]},{"short":"HVO","name":"HVO renewable diesel","x":76,"y":77,"r":26,"cat":"bio","lx":68,"ly":70,"band":[76,82]},{"short":"Bio-MeOH","name":"Bio-methanol","x":56,"y":72,"r":16,"cat":"bio","lx":50,"ly":64,"band":[66,89]},{"short":"Bio-LNG","name":"Bio-LNG","x":64,"y":78,"r":16,"cat":"bio","lx":57,"ly":86,"band":[55,85]},{"short":"Bio-oils","name":"Bio-oils / pyrolysis","x":25,"y":64,"r":14,"cat":"bio","lx":16,"ly":59,"band":[60,94]},{"short":"E-MeOH","name":"E-methanol","x":44,"y":87,"r":16,"cat":"efuel","lx":44,"ly":96,"band":[77,99]},{"short":"E-LNG","name":"E-LNG","x":24,"y":85,"r":16,"cat":"efuel","lx":28,"ly":93,"band":[73,92]},{"short":"E-diesel","name":"E-diesel (FT/PtL)","x":18,"y":88,"r":24,"cat":"efuel","lx":11,"ly":80,"band":[69,96]},{"short":"NH3","name":"Green ammonia","x":30,"y":78,"r":12,"cat":"efuel","lx":35,"ly":71,"band":[65,88]},{"short":"Blue NH3","name":"Blue ammonia","x":28,"y":55,"r":12,"cat":"efuel","lx":35,"ly":49,"band":[0,80]},{"short":"H2","name":"Green hydrogen","x":10,"y":84,"r":12,"cat":"efuel","lx":4,"ly":76,"band":[69,93]},{"short":"Nuclear","name":"Nuclear / SMR","x":9,"y":97,"r":12,"cat":"nonfuel","lx":17,"ly":99,"band":[96,98]},{"short":"Efficiency","name":"Energy efficiency","x":95,"y":15,"r":20,"cat":"nonfuel","lx":96,"ly":26,"band":[4,16]},{"short":"Wind","name":"Wind assistance","x":80,"y":9,"r":20,"cat":"nonfuel","lx":72,"ly":15,"band":[5,20]},{"short":"OCCS","name":"Onboard CO2 capture","x":40,"y":35,"r":16,"cat":"nonfuel","lx":40,"ly":26,"band":[8,56]},{"short":"Solar","name":"Deck solar (PV)","x":84,"y":2,"r":9,"cat":"nonfuel","lx":76,"ly":1,"band":null},{"short":"Fossil LNG","name":"LNG (fossil)","x":88,"y":10,"r":16,"cat":"fossil","lx":94,"ly":3,"band":[2,17]}]};
 /*DATASET_END*/
-/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r4 */
+/*HISTORY_START*/
+const HISTORY = {"focus":["B30","HVO","B100"],"versions":[{"version":"v4","date":"2026-07-27","note":"Baseline \u2014 precision-audited triangulated dataset. Timeline starts here; earlier versions intentionally not backfilled (owner). Future coordinate moves append as new versions.","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,2],"Fossil LNG":[88,10]},"moves":{}}]};
+/*HISTORY_END*/
+/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r5 */
 const CONST={REF:91.16,
  FOSSIL:{VLSFO:91.39,HFO:91.74,MGO:90.77},
  LNG:{otto_ms:89.20,lbsi:86.94,otto_ss:82.87,diesel_ss:76.08},
@@ -406,13 +414,51 @@ function abateCost(prem,ms,alt,base){ms=(ms===undefined)?0.30:ms;alt=(alt===unde
 (function(){const jm={};DATASET.data.forEach(d=>jm[d.short]=[d.x,d.y]);
  DATA.forEach(d=>{const j=jm[d.short];if(!j||j[0]!==d.x||j[1]!==d.y)console.warn("DATASET mismatch:",d.short);});})();
 // view toggle
-const vm=document.getElementById('viewMap'),vc=document.getElementById('viewCalc');
-const mainEl=document.querySelector('.main'),calcEl=document.getElementById('calcwrap');
+const vm=document.getElementById('viewMap'),vc=document.getElementById('viewCalc'),vt=document.getElementById('viewTime');
+const mainEl=document.querySelector('.main'),calcEl=document.getElementById('calcwrap'),timeEl=document.getElementById('timewrap');
 const mapChipEls=[document.getElementById('mapchips1'),document.querySelector('.grp.mapchips2'),document.getElementById('dropTog').parentElement];
-function setView(calc){calcEl.style.display=calc?'':'none';mainEl.style.display=calc?'none':'';
- mapChipEls.forEach(e=>{if(e)e.style.display=calc?'none':'';});
- vc.classList.toggle('on',calc);vm.classList.toggle('on',!calc);}
-vm.onclick=()=>setView(false);vc.onclick=()=>setView(true);
+function setView(mode){mainEl.style.display=mode==='map'?'':'none';calcEl.style.display=mode==='calc'?'':'none';timeEl.style.display=mode==='time'?'':'none';
+ mapChipEls.forEach(e=>{if(e)e.style.display=mode==='map'?'':'none';});
+ vm.classList.toggle('on',mode==='map');vc.classList.toggle('on',mode==='calc');vt.classList.toggle('on',mode==='time');
+ if(mode==='time')drawTimeline();}
+vm.onclick=()=>setView('map');vc.onclick=()=>setView('calc');vt.onclick=()=>setView('time');
+
+// ---- timeline view (owner request r5): data-driven from HISTORY, forward-only from v4 baseline ----
+const T=id=>document.getElementById(id);
+const tsvg=document.getElementById('tplot'); let tIdx=HISTORY.versions.length-1, tTimer=null;
+function drawTimeline(){
+ while(tsvg.firstChild)tsvg.removeChild(tsvg.firstChild);
+ const defs=el('defs',{}); const mk=el('marker',{id:'tarr',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'});
+ mk.appendChild(el('path',{d:'M0,0 L10,5 L0,10 z',fill:'#6B7780','fill-opacity':'0.7'})); defs.appendChild(mk); tsvg.appendChild(defs);
+ // frame + quadrant guides + axis captions (light)
+ tsvg.appendChild(el('rect',{x:X(0),y:Y(100),width:X(100)-X(0),height:Y(0)-Y(100),fill:'none',stroke:'#DCE2E7','stroke-width':1}));
+ [50].forEach(v=>{tsvg.appendChild(el('line',{x1:X(v),y1:Y(0),x2:X(v),y2:Y(100),stroke:'#EEF3F7','stroke-width':1}));
+  tsvg.appendChild(el('line',{x1:X(0),y1:Y(v),x2:X(100),y2:Y(v),stroke:'#EEF3F7','stroke-width':1}));});
+ [0,50,100].forEach(v=>{const yt=el('text',{x:X(0)-8,y:Y(v)+4,'text-anchor':'end',fill:'#9AA6AE','font-size':'10'});yt.textContent=v+'%';tsvg.appendChild(yt);});
+ const xa=el('text',{x:X(100),y:Y(0)+34,'text-anchor':'end',fill:'#6B7780','font-size':'11','font-weight':'700'});xa.textContent='COMMERCIAL READINESS →';tsvg.appendChild(xa);
+ const ya=el('text',{x:X(0)-40,y:Y(50),'text-anchor':'middle',fill:'#6B7780','font-size':'11','font-weight':'700',transform:'rotate(-90 '+(X(0)-40)+' '+Y(50)+')'});ya.textContent='WtW GHG CUT ↑';tsvg.appendChild(ya);
+ const V=HISTORY.versions[tIdx], prev=tIdx>0?HISTORY.versions[tIdx-1]:null;
+ DATA.forEach(d=>{const p=V.pos[d.short]; if(!p)return; const cx=X(p[0]),cy=Y(p[1]);
+  const o=prev&&prev.pos[d.short]; const moved=o&&(o[0]!==p[0]||o[1]!==p[1]);
+  if(moved){const ox=X(o[0]),oy=Y(o[1]);
+   tsvg.appendChild(el('circle',{cx:ox,cy:oy,r:Math.max(7,d.r*0.55),fill:'none',stroke:CAT[d.cat],'stroke-width':1.2,'stroke-dasharray':'3 3','stroke-opacity':0.5}));
+   const dx=cx-ox,dy=cy-oy,L=Math.hypot(dx,dy)||1,k=Math.max(0,(L-d.r-5)/L);
+   tsvg.appendChild(el('line',{x1:ox,y1:oy,x2:ox+dx*k,y2:oy+dy*k,stroke:CAT[d.cat],'stroke-width':1.6,'stroke-opacity':0.6,'stroke-dasharray':'6 4','marker-end':'url(#tarr)'}));}
+  tsvg.appendChild(el('circle',{cx:cx,cy:cy,r:d.r,fill:CAT[d.cat],'fill-opacity':moved?0.95:0.85,stroke:EDGE[d.cat],'stroke-width':moved?2.2:1.4}));
+  const t=el('text',{x:cx,y:cy+4,'text-anchor':'middle',fill:(d.cat==='bio'||d.cat==='efuel')?'#002039':'#78848C','font-size':'11','font-weight':'700'});t.textContent=d.short;tsvg.appendChild(t);});
+ T('tLabel').textContent=V.version+' · '+V.date+(prev?'':' · baseline');
+ const tp=T('tpanel'), moved=Object.keys(V.moves||{});
+ if(!prev){tp.innerHTML='<b>Baseline (v4).</b> The timeline starts here — the precision-audited dataset. Earlier versions were intentionally not backfilled. Every future coordinate move a sweep makes appends a new version; step ◀ ▶ or Play to watch the shifts as they accumulate.';}
+ else if(!moved.length){tp.innerHTML='<b>'+V.version+'</b> vs '+prev.version+': no coordinate moves (bands/citations only).';}
+ else{tp.innerHTML='<b>Moved in '+V.version+' (vs '+prev.version+'):</b><br><br>'+moved.map(function(s){var m=V.moves[s];var frm=m.from?('('+m.from.join(', ')+')'):'new';return '<b>'+s+'</b> &nbsp;'+frm+' → ('+m.to.join(', ')+')'+(m.reason?'<br><span style="color:#46583F">'+m.reason+'</span>':'')+(m.source?' <span style="color:#9AA6AE">['+m.source+']</span>':'');}).join('<br><br>');}
+ T('tPrev').style.opacity=tIdx>0?'1':'0.35'; T('tNext').style.opacity=tIdx<HISTORY.versions.length-1?'1':'0.35';
+}
+T('tPrev').onclick=()=>{if(tIdx>0){tIdx--;drawTimeline();}};
+T('tNext').onclick=()=>{if(tIdx<HISTORY.versions.length-1){tIdx++;drawTimeline();}};
+T('tPlay').onclick=()=>{if(tTimer){clearInterval(tTimer);tTimer=null;T('tPlay').textContent='▶ Play';return;}
+ if(HISTORY.versions.length<2)return; tIdx=0;drawTimeline();T('tPlay').textContent='⏸ Stop';
+ tTimer=setInterval(()=>{if(tIdx<HISTORY.versions.length-1){tIdx++;drawTimeline();}else{clearInterval(tTimer);tTimer=null;T('tPlay').textContent='▶ Play';}},1200);};
+
 // calculator wiring
 const $=id=>document.getElementById(id);
 const fsel=$('p1fuel');Object.keys(CONST.FUELS).forEach(k=>{const o=document.createElement('option');o.textContent=k;fsel.appendChild(o);});
