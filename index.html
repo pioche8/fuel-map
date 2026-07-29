@@ -2,14 +2,14 @@
 {
   "name": "Marine Decarbonisation Technology Map",
   "schemaVersion": 1,
-  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v5 · app r5): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
+  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v5 · app r6): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
   "mcpTools": [],
   "mcpServerNames": []
 }
 </script>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marine decarbonisation — technology system (data v5 · app r5)</title>
+<title>Marine decarbonisation — technology system (data v5 · app r6)</title>
 <style>
 :root{--navy:#002039;--blue:#004070;--olive:#5F775E;--grey:#9AA6AE;--amber:#C8A24B;--red:#D2091E;
 --ink:#002039;--mut:#6B7780;--line:#DCE2E7;--tint:#EEF3F7;--paper:#ffffff;}
@@ -54,7 +54,7 @@ svg{width:100%;height:auto;display:block}
 .foot{color:var(--mut);font-size:11px;margin-top:14px;line-height:1.5}
 @media(max-width:880px){.main{grid-template-columns:1fr}.panel{position:static;min-height:0}}
 </style></head><body><div class="wrap">
-<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v5</span> · app r5 — live map + calculator</div>
+<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v5</span> · app r6 — live map + calculator</div>
 <h1>Marine decarbonisation: the technology landscape</h1>
 <p class="sub">Topić dry-bulk fleet · 18 fuels and levers on commercial readiness vs depth of well-to-wake cut, with sourced uncertainty bands. Hover a bubble for the evidence.</p>
 <div class="toolbar">
@@ -105,7 +105,7 @@ svg{width:100%;height:auto;display:block}
    <div class="verdict" id="o2v">—</div>
   </div>
   <div class="panel" style="position:static;min-height:0">
-   <div class="pcat" style="color:#C8A24B">3 · IMO NZF exposure <span style="color:#D2091E">(draft — vote 4 Dec 2026)</span></div>
+   <div class="pcat" style="color:#C8A24B">3 · IMO NZF exposure <span style="color:#D2091E">(draft — not yet adopted)</span></div>
    <div class="pname" style="font-size:16px">GFI vs targets → USD</div>
    <div class="row"><div class="rk">Year</div><div class="rv"><select id="p3year"></select></div></div>
    <div class="row"><div class="rk">Fleet GFI g/MJ</div><div class="rv"><input id="p3gfi" type="number" step="0.01" value="95.40" style="width:90px"></div></div>
@@ -632,7 +632,7 @@ const DATASET = {
 /*HISTORY_START*/
 const HISTORY = {"focus":["B30","HVO","B100"],"versions":[{"version":"v4","date":"2026-07-27","note":"Baseline \u2014 precision-audited triangulated dataset. Timeline starts here; earlier versions intentionally not backfilled (owner). Future coordinate moves append as new versions.","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,2],"Fossil LNG":[88,10]},"moves":{}},{"version":"v5","date":"2026-07-29","note":"Solar raised on owner fleet-adoption signal; provisional + physics-bounded (deck PV caps low).","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,4],"Fossil LNG":[88,10]},"moves":{"Solar":{"from":[84,2],"to":[84,4],"reason":"Being fitted on the Topi\u0107 fleet (owner) \u2014 provisional WtW cut 2%\u21924%, band 2\u20135% pending measured output","source":"Owner, fleet install Jul-26"}}}]};
 /*HISTORY_END*/
-/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v5 · app r5 */
+/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v5 · app r6 */
 const CONST={REF:91.16,
  FOSSIL:{VLSFO:91.39,HFO:91.74,MGO:90.77},
  LNG:{otto_ms:89.20,lbsi:86.94,otto_ss:82.87,diesel_ss:76.08},
