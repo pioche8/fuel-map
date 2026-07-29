@@ -2,14 +2,14 @@
 {
   "name": "Marine Decarbonisation Technology Map",
   "schemaVersion": 1,
-  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v4 · app r5): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
+  "description": "Marine decarbonisation technology SYSTEM for the Topic dry-bulk fleet (data v5 · app r5): the triangulated interactive map plus a live calculator — fuel/blend WtW intensity, FuelEU compliance balance and Annex IV penalty, and IMO NZF exposure — computed client-side from the canonical dataset with a parity-tested engine. Updated automatically by the scheduled research sweeps.",
   "mcpTools": [],
   "mcpServerNames": []
 }
 </script>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marine decarbonisation — technology system (data v4 · app r5)</title>
+<title>Marine decarbonisation — technology system (data v5 · app r5)</title>
 <style>
 :root{--navy:#002039;--blue:#004070;--olive:#5F775E;--grey:#9AA6AE;--amber:#C8A24B;--red:#D2091E;
 --ink:#002039;--mut:#6B7780;--line:#DCE2E7;--tint:#EEF3F7;--paper:#ffffff;}
@@ -54,7 +54,7 @@ svg{width:100%;height:auto;display:block}
 .foot{color:var(--mut);font-size:11px;margin-top:14px;line-height:1.5}
 @media(max-width:880px){.main{grid-template-columns:1fr}.panel{position:static;min-height:0}}
 </style></head><body><div class="wrap">
-<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v4</span> · app r5 — live map + calculator</div>
+<div class="kick">Deliverable 3 · Technology system · <span class="dataver">data v5</span> · app r5 — live map + calculator</div>
 <h1>Marine decarbonisation: the technology landscape</h1>
 <p class="sub">Topić dry-bulk fleet · 18 fuels and levers on commercial readiness vs depth of well-to-wake cut, with sourced uncertainty bands. Hover a bubble for the evidence.</p>
 <div class="toolbar">
@@ -67,7 +67,7 @@ svg{width:100%;height:auto;display:block}
  </div>
 </div>
 <div class="main">
- <div class="plotcard"><svg id="plot" viewBox="0 0 1000 588" role="img" aria-label="Technology landscape scatter, data v4"></svg></div>
+ <div class="plotcard"><svg id="plot" viewBox="0 0 1000 588" role="img" aria-label="Technology landscape scatter, data v5"></svg></div>
  <div class="panel" id="panel"></div>
 </div>
 
@@ -77,7 +77,7 @@ svg{width:100%;height:auto;display:block}
   <div style="display:grid;grid-template-columns:1fr 320px;gap:16px"><div class="plotcard"><svg id="tplot" viewBox="0 0 1000 588" role="img" aria-label="Timeline scatter, coordinate shifts across versions"></svg></div><div class="panel" id="tpanel" style="font-size:12.5px;line-height:1.55"></div></div>
  </div>
  <div id="calcwrap" style="display:none">
- <div class="hint" style="margin:2px 0 10px;font-size:11.5px;line-height:1.5"><b>Structural values</b> (pathway coordinates, regulatory coefficients) come from <b>data v4</b> and change only with a cited dataset release. <b>Market defaults</b> — EUA &euro;/t and blend premium $/t — are <b>editable snapshots</b>, refreshed at the monthly sweep and dated by the &ldquo;prices as of&rdquo; stamp below; a price refresh never changes the dataset version. Every input stays editable; edits are yours until reload.</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
+ <div class="hint" style="margin:2px 0 10px;font-size:11.5px;line-height:1.5"><b>Structural values</b> (pathway coordinates, regulatory coefficients) come from <b>data v5</b> and change only with a cited dataset release. <b>Market defaults</b> — EUA &euro;/t and blend premium $/t — are <b>editable snapshots</b>, refreshed at the monthly sweep and dated by the &ldquo;prices as of&rdquo; stamp below; a price refresh never changes the dataset version. Every input stays editable; edits are yours until reload.</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px">
   <div class="panel" style="position:static;min-height:0">
    <div class="pcat" style="color:#5F775E">1 · Fuel intensity &amp; abatement</div>
    <div class="pname" style="font-size:16px">Pathway / blend → WtW cut</div>
@@ -118,7 +118,7 @@ svg{width:100%;height:auto;display:block}
    <div class="verdict">Deck fleet model: z-factors on 93.3, band 12.129 g, USD 100/380. Scenario until adopted.</div>
   </div>
  </div>
- <div class="foot" style="margin-top:10px">Live coefficients from <b><span class="dataver">data v4</span></b> · engine formula-identical to engine.py (parity 37/37) and the workbook's 44 formulas (self-test 44/44) · FuelEU penalty per Annex IV, Reg (EU) 2023/1805; €640/tCO₂e shown for comparability (DNV conversion) · NZF figures are the deck's validated fleet model of the DRAFT framework · defaults: EU energy 15M MJ (≈8% of one ship-year) · <b>prices as of <span id="pricedate">10 Jul 2026</span></b> — EUA €<span id="priceeua">80</span>/tCO₂e, B30 blend premium $<span id="priceprem">269</span>/t Rotterdam (refreshed each monthly sweep; a price refresh NEVER bumps the dataset version — both fields stay user-editable above regardless of the last sweep).</div>
+ <div class="foot" style="margin-top:10px">Live coefficients from <b><span class="dataver">data v5</span></b> · engine formula-identical to engine.py (parity 37/37) and the workbook's 44 formulas (self-test 44/44) · FuelEU penalty per Annex IV, Reg (EU) 2023/1805; €640/tCO₂e shown for comparability (DNV conversion) · NZF figures are the deck's validated fleet model of the DRAFT framework · defaults: EU energy 15M MJ (≈8% of one ship-year) · <b>prices as of <span id="pricedate">10 Jul 2026</span></b> — EUA €<span id="priceeua">80</span>/tCO₂e, B30 blend premium $<span id="priceprem">269</span>/t Rotterdam (refreshed each monthly sweep; a price refresh NEVER bumps the dataset version — both fields stay user-editable above regardless of the last sweep).</div>
 </div>
 <div class="foot"><b>v3 · triangulated 24 Jul 2026</b> — every pathway anchored on one regulatory, one class/consultancy and one peer-reviewed source (full table: fuel-map-v3-verified.md). Y-axis to scale: WtW GHG cut vs the FuelEU 91.16 gCO₂e/MJ 2020 reference (Reg (EU) 2023/1805 Annex II defaults, GWP AR4; whiskers = sourced bands). X-axis: MMMCZCS 7-dimension value-chain readiness mapped to a 0–100 rubric — directional. Bubble size = fit to today’s fleet (drop-in &gt; retrofit &gt; dual-fuel conversion &gt; newbuild-only). Battery-electric excluded: short-sea only (Kersey 2022); on 2024 EU grid ≈65% cut. Blue NH₃ can be net-negative at low capture (−37%). Bio-oils plotted at band mid. Full sourcing &amp; math: <i>fuel-map-v3-verified.md</i> · <i>Fuel_Technology_Map_v3.xlsx</i> (v2 files retained as audit trail). Figures dated Jun–Jul 2026 where priced; re-verify before committing capital.</div>
 </div>
@@ -239,13 +239,13 @@ const DATA=[
  mile:"EU ETS acceptance 22 Jul 26; installs incl. Berge Bulk; Wärtsilä unit on Solvang",
  src:"GCMD Jun-25/Jul-26 · Visonà 2024",old:null,added:false,
  verdict:"Track, don’t commit: the regulatory door just opened; measured performance still shy of design.",lx:40,ly:26},
-{name:"Deck solar (PV)",short:"Solar",x:84,y:2,r:9,cat:"nonfuel",fit:"Retrofit",horizon:"Now",dropin:true,conf:"High",
- wtw:"~1–2% of total energy (auxiliary load only)",band:null,
+{name:"Deck solar (PV)",short:"Solar",x:84,y:4,r:9,cat:"nonfuel",fit:"Retrofit",horizon:"Now",dropin:true,conf:"Medium",
+ wtw:"~2–5% of total energy; being fitted on the Topić fleet (provisional ~4%, to confirm from measured output)",band:[2,5],
  cost:"Low capex, low yield",cert:"n/a",
- constraint:"Hatch-cover operations; area.",
- mile:"First direct-propulsion PV is an inland vessel (Blue Marlin, Jul-25)",
- src:"pv magazine 14 Jul 25",old:null,added:false,
- verdict:"Monitor only: trims hotel load, not propulsion.",lx:76,ly:1},
+ constraint:"Deck area / hatch-cover ops cap the ceiling — propulsion energy dominates.",
+ mile:"Being incorporated on the Topić fleet (owner, Jul-26); first direct-propulsion PV = inland vessel Blue Marlin, Jul-25",
+ src:"Owner (fleet install, Jul-26) · pv magazine 14 Jul 25",old:null,added:false,
+ verdict:"Fitted on our ships (owner, Jul-26): trims auxiliary/hotel load — provisional ~4% cut, band 2–5% pending measured contribution. Complements the drop-in ladder; does not touch propulsion.",lx:76,ly:1},
 {name:"LNG (fossil)",short:"Fossil LNG",x:88,y:10,r:16,cat:"fossil",fit:"Dual-fuel",horizon:"Now",dropin:false,conf:"High",
  wtw:"76.1–89.2 g by engine class → 2–17% cut (Otto-MS 2.2%; Diesel-SS 16.5%)",band:[2,17],
  cost:"Fuel $853/t R’dam (Jul 26); conversion of existing bulkers not a real market",
@@ -364,12 +364,275 @@ const bt=document.getElementById('bandTog');
 bt.onclick=()=>{const on=bt.classList.toggle('on');document.getElementById('bands').style.display=on?'':'none';};
 
 /*DATASET_START*/
-const DATASET = {"version":"v4","date":"2026-07-27","focus":["B30","HVO","B100"],"battery":"excluded","data":[{"short":"B30","name":"B30 biodiesel","x":88,"y":23,"r":26,"cat":"bio","lx":80,"ly":31,"band":[18,23]},{"short":"B100","name":"B100 biodiesel","x":80,"y":82,"r":26,"cat":"bio","lx":89,"ly":87,"band":[80,88]},{"short":"HVO","name":"HVO renewable diesel","x":76,"y":77,"r":26,"cat":"bio","lx":68,"ly":70,"band":[76,82]},{"short":"Bio-MeOH","name":"Bio-methanol","x":56,"y":72,"r":16,"cat":"bio","lx":50,"ly":64,"band":[66,89]},{"short":"Bio-LNG","name":"Bio-LNG","x":64,"y":78,"r":16,"cat":"bio","lx":57,"ly":86,"band":[55,85]},{"short":"Bio-oils","name":"Bio-oils / pyrolysis","x":25,"y":64,"r":14,"cat":"bio","lx":16,"ly":59,"band":[60,94]},{"short":"E-MeOH","name":"E-methanol","x":44,"y":87,"r":16,"cat":"efuel","lx":44,"ly":96,"band":[77,99]},{"short":"E-LNG","name":"E-LNG","x":24,"y":85,"r":16,"cat":"efuel","lx":28,"ly":93,"band":[73,92]},{"short":"E-diesel","name":"E-diesel (FT/PtL)","x":18,"y":88,"r":24,"cat":"efuel","lx":11,"ly":80,"band":[69,96]},{"short":"NH3","name":"Green ammonia","x":30,"y":78,"r":12,"cat":"efuel","lx":35,"ly":71,"band":[65,88]},{"short":"Blue NH3","name":"Blue ammonia","x":28,"y":55,"r":12,"cat":"efuel","lx":35,"ly":49,"band":[0,80]},{"short":"H2","name":"Green hydrogen","x":10,"y":84,"r":12,"cat":"efuel","lx":4,"ly":76,"band":[69,93]},{"short":"Nuclear","name":"Nuclear / SMR","x":9,"y":97,"r":12,"cat":"nonfuel","lx":17,"ly":99,"band":[96,98]},{"short":"Efficiency","name":"Energy efficiency","x":95,"y":15,"r":20,"cat":"nonfuel","lx":96,"ly":26,"band":[4,16]},{"short":"Wind","name":"Wind assistance","x":80,"y":9,"r":20,"cat":"nonfuel","lx":72,"ly":15,"band":[5,20]},{"short":"OCCS","name":"Onboard CO2 capture","x":40,"y":35,"r":16,"cat":"nonfuel","lx":40,"ly":26,"band":[8,56]},{"short":"Solar","name":"Deck solar (PV)","x":84,"y":2,"r":9,"cat":"nonfuel","lx":76,"ly":1,"band":null},{"short":"Fossil LNG","name":"LNG (fossil)","x":88,"y":10,"r":16,"cat":"fossil","lx":94,"ly":3,"band":[2,17]}]};
+const DATASET = {
+ "version": "v5",
+ "date": "2026-07-29",
+ "focus": [
+  "B30",
+  "HVO",
+  "B100"
+ ],
+ "battery": "excluded",
+ "data": [
+  {
+   "short": "B30",
+   "name": "B30 biodiesel",
+   "x": 88,
+   "y": 23,
+   "r": 26,
+   "cat": "bio",
+   "lx": 80,
+   "ly": 31,
+   "band": [
+    18,
+    23
+   ]
+  },
+  {
+   "short": "B100",
+   "name": "B100 biodiesel",
+   "x": 80,
+   "y": 82,
+   "r": 26,
+   "cat": "bio",
+   "lx": 89,
+   "ly": 87,
+   "band": [
+    80,
+    88
+   ]
+  },
+  {
+   "short": "HVO",
+   "name": "HVO renewable diesel",
+   "x": 76,
+   "y": 77,
+   "r": 26,
+   "cat": "bio",
+   "lx": 68,
+   "ly": 70,
+   "band": [
+    76,
+    82
+   ]
+  },
+  {
+   "short": "Bio-MeOH",
+   "name": "Bio-methanol",
+   "x": 56,
+   "y": 72,
+   "r": 16,
+   "cat": "bio",
+   "lx": 50,
+   "ly": 64,
+   "band": [
+    66,
+    89
+   ]
+  },
+  {
+   "short": "Bio-LNG",
+   "name": "Bio-LNG",
+   "x": 64,
+   "y": 78,
+   "r": 16,
+   "cat": "bio",
+   "lx": 57,
+   "ly": 86,
+   "band": [
+    55,
+    85
+   ]
+  },
+  {
+   "short": "Bio-oils",
+   "name": "Bio-oils / pyrolysis",
+   "x": 25,
+   "y": 64,
+   "r": 14,
+   "cat": "bio",
+   "lx": 16,
+   "ly": 59,
+   "band": [
+    60,
+    94
+   ]
+  },
+  {
+   "short": "E-MeOH",
+   "name": "E-methanol",
+   "x": 44,
+   "y": 87,
+   "r": 16,
+   "cat": "efuel",
+   "lx": 44,
+   "ly": 96,
+   "band": [
+    77,
+    99
+   ]
+  },
+  {
+   "short": "E-LNG",
+   "name": "E-LNG",
+   "x": 24,
+   "y": 85,
+   "r": 16,
+   "cat": "efuel",
+   "lx": 28,
+   "ly": 93,
+   "band": [
+    73,
+    92
+   ]
+  },
+  {
+   "short": "E-diesel",
+   "name": "E-diesel (FT/PtL)",
+   "x": 18,
+   "y": 88,
+   "r": 24,
+   "cat": "efuel",
+   "lx": 11,
+   "ly": 80,
+   "band": [
+    69,
+    96
+   ]
+  },
+  {
+   "short": "NH3",
+   "name": "Green ammonia",
+   "x": 30,
+   "y": 78,
+   "r": 12,
+   "cat": "efuel",
+   "lx": 35,
+   "ly": 71,
+   "band": [
+    65,
+    88
+   ]
+  },
+  {
+   "short": "Blue NH3",
+   "name": "Blue ammonia",
+   "x": 28,
+   "y": 55,
+   "r": 12,
+   "cat": "efuel",
+   "lx": 35,
+   "ly": 49,
+   "band": [
+    0,
+    80
+   ]
+  },
+  {
+   "short": "H2",
+   "name": "Green hydrogen",
+   "x": 10,
+   "y": 84,
+   "r": 12,
+   "cat": "efuel",
+   "lx": 4,
+   "ly": 76,
+   "band": [
+    69,
+    93
+   ]
+  },
+  {
+   "short": "Nuclear",
+   "name": "Nuclear / SMR",
+   "x": 9,
+   "y": 97,
+   "r": 12,
+   "cat": "nonfuel",
+   "lx": 17,
+   "ly": 99,
+   "band": [
+    96,
+    98
+   ]
+  },
+  {
+   "short": "Efficiency",
+   "name": "Energy efficiency",
+   "x": 95,
+   "y": 15,
+   "r": 20,
+   "cat": "nonfuel",
+   "lx": 96,
+   "ly": 26,
+   "band": [
+    4,
+    16
+   ]
+  },
+  {
+   "short": "Wind",
+   "name": "Wind assistance",
+   "x": 80,
+   "y": 9,
+   "r": 20,
+   "cat": "nonfuel",
+   "lx": 72,
+   "ly": 15,
+   "band": [
+    5,
+    20
+   ]
+  },
+  {
+   "short": "OCCS",
+   "name": "Onboard CO2 capture",
+   "x": 40,
+   "y": 35,
+   "r": 16,
+   "cat": "nonfuel",
+   "lx": 40,
+   "ly": 26,
+   "band": [
+    8,
+    56
+   ]
+  },
+  {
+   "short": "Solar",
+   "name": "Deck solar (PV)",
+   "x": 84,
+   "y": 4,
+   "r": 9,
+   "cat": "nonfuel",
+   "lx": 76,
+   "ly": 1,
+   "band": [
+    2,
+    5
+   ]
+  },
+  {
+   "short": "Fossil LNG",
+   "name": "LNG (fossil)",
+   "x": 88,
+   "y": 10,
+   "r": 16,
+   "cat": "fossil",
+   "lx": 94,
+   "ly": 3,
+   "band": [
+    2,
+    17
+   ]
+  }
+ ]
+};
 /*DATASET_END*/
 /*HISTORY_START*/
-const HISTORY = {"focus":["B30","HVO","B100"],"versions":[{"version":"v4","date":"2026-07-27","note":"Baseline \u2014 precision-audited triangulated dataset. Timeline starts here; earlier versions intentionally not backfilled (owner). Future coordinate moves append as new versions.","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,2],"Fossil LNG":[88,10]},"moves":{}}]};
+const HISTORY = {"focus":["B30","HVO","B100"],"versions":[{"version":"v4","date":"2026-07-27","note":"Baseline \u2014 precision-audited triangulated dataset. Timeline starts here; earlier versions intentionally not backfilled (owner). Future coordinate moves append as new versions.","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,2],"Fossil LNG":[88,10]},"moves":{}},{"version":"v5","date":"2026-07-29","note":"Solar raised on owner fleet-adoption signal; provisional + physics-bounded (deck PV caps low).","pos":{"B30":[88,23],"B100":[80,82],"HVO":[76,77],"Bio-MeOH":[56,72],"Bio-LNG":[64,78],"Bio-oils":[25,64],"E-MeOH":[44,87],"E-LNG":[24,85],"E-diesel":[18,88],"NH3":[30,78],"Blue NH3":[28,55],"H2":[10,84],"Nuclear":[9,97],"Efficiency":[95,15],"Wind":[80,9],"OCCS":[40,35],"Solar":[84,4],"Fossil LNG":[88,10]},"moves":{"Solar":{"from":[84,2],"to":[84,4],"reason":"Being fitted on the Topi\u0107 fleet (owner) \u2014 provisional WtW cut 2%\u21924%, band 2\u20135% pending measured output","source":"Owner, fleet install Jul-26"}}}]};
 /*HISTORY_END*/
-/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v4 · app r5 */
+/* Fuel-map calculation engine (JS) — MUST stay formula-identical to engine.py (parity-tested). data v5 · app r5 */
 const CONST={REF:91.16,
  FOSSIL:{VLSFO:91.39,HFO:91.74,MGO:90.77},
  LNG:{otto_ms:89.20,lbsi:86.94,otto_ss:82.87,diesel_ss:76.08},
